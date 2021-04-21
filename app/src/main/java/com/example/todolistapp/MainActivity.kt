@@ -68,10 +68,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .subscribeBy(
                     onSuccess = {
                         //Log.d("mLog", it.toString())
+                        Log.d("mLog", it.toString())
                         textView.text = it.toString()
                     },
                     onError = {
                         //Log.d("mLog", it.toString())
+                        Log.e("mLog", it.toString())
                     }
                 ).addTo(compositeDisposable)
         }
