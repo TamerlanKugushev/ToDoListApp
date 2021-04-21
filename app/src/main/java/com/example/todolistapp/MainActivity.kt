@@ -1,10 +1,9 @@
 package com.example.todolistapp
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.todolistapp.data.models.UserRequest
 import com.example.todolistapp.data.models.UserResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -68,11 +67,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
-                        Log.d("mLog", it.toString())
+                        //Log.d("mLog", it.toString())
                         textView.text = it.toString()
                     },
                     onError = {
-                        Log.d("mLog", it.toString())
+                        //Log.d("mLog", it.toString())
                     }
                 ).addTo(compositeDisposable)
         }
