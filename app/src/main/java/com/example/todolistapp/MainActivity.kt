@@ -1,12 +1,10 @@
 package com.example.todolistapp
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.todolistapp.data.models.UserRequest
-import com.example.todolistapp.data.models.UserResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -14,95 +12,144 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
 
-    private val userService = RetrofitHolder.userService
+    private val unauthorizedUserService = RetrofitHolder.unauthorizedUserService
+    private val authorizedUserService = RetrofitHolder.authorizedUserService
     private var compositeDisposable = CompositeDisposable()
     private var response: String = ""
     private var token = ""
+    private var prefsHelp: AppPreferencesHelper? = null
 
+
+    @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        prefsHelp = AppPreferencesHelper(this, "Shared_Preferences_Demo")
 
 
-
-        buttonLogin.setOnClickListener(this)
-        buttonLogout.setOnClickListener(this)
-        buttonClear.setOnClickListener(this)
-        buttonGetLogged.setOnClickListener(this)
-        buttonDeleteUser.setOnClickListener(this)
-        buttonUpdateUserProfile.setOnClickListener(this)
-
-
+        buttonLogin.setOnClickListener { login() }
+        buttonLogout.setOnClickListener { logout() }
+        buttonGetLogged.setOnClickListener { getLoggedInUserViaToken() }
+        buttonDeleteUser.setOnClickListener { deleteUser() }
+        buttonClear.setOnClickListener { clearTextView() }
+        //buttonUpdateUserProfile.setOnClickListener { updateUser() }
+        //buttonRegisterUser.setOnClickListener { registerUser() }
     }
+
+
+    /*private fun registerUser() {
+        val body = UserRegisterRequest(
+            name = "Tamirlan Kugushev",
+            age = 20,
+            email = "tamirlankugushev@mail.ru",
+            password = "wsde1320"
+        )
+        userService.registerUser(body)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    Log.d("mLog", it.toString())
+                    token = it.token
+                    textView.text=it.toString()
+                },
+                onError = {
+                    Log.d("mLog", it.toString())
+                }
+            ).addTo(compositeDisposable)
+    }*/
 
     private fun login() {
         val body = UserRequest(
             email = "tamirlankugushev@mail.ru",
             password = "wsde1320"
         )
-
-        buttonLogin.setOnClickListener {
-            userService.loginUser(body)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        Log.d("mLog", it.toString())
-                        token = it.token
-                        setResponse(it)
-                    },
-                    onError = {
-                        Log.d("mLog", it.toString())
-                    }
-                ).addTo(compositeDisposable)
-        }
+        unauthorizedUserService.loginUser(body)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    Log.d("mLog", it.toString())
+                    token = it.token
+                    textView.text = it.toString()
+                },
+                onError = {
+                    Log.d("mLog", it.toString())
+                }
+            ).addTo(compositeDisposable)
+        prefsHelp?.setToken(token)
     }
 
 
+    /*private fun updateUser() {
+        val body = UserUpdateRequest(25)
+        authorizedUserService.updateUser("Bearer $token", body)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    Log.d("mLog", it.toString())
+                    textView.text = it.userUpdate.age.toString()
+                },
+                onError = {
+                    Log.d("mLog", it.toString())
+                }
+            ).addTo(compositeDisposable)
+    }*/
+
+
+
     private fun logout() {
-        buttonLogin.setOnClickListener {
-            userService.logoutUser(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        Log.d("mLog", it.toString())
-                        textView.text = it.toString()
-                    },
-                    onError = {
-                        Log.d("mLog", it.toString())
-                    }
-                ).addTo(compositeDisposable)
-        }
+        authorizedUserService.logoutUser("Bearer $token")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    Log.d("mLog", it.toString())
+                    textView.text = it.success.toString()
+                },
+                onError = {
+                    Log.d("mLog", it.toString())
+                }
+            ).addTo(compositeDisposable)
     }
 
 
     private fun getLoggedInUserViaToken() {
-        buttonLogin.setOnClickListener {
-            userService.getLoggedInUserViaToken(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        Log.d("mLog", it.toString())
-                        textView.text = it.toString()
-                    },
-                    onError = {
-                        Log.d("mLog", it.toString())
-                    }
-                ).addTo(compositeDisposable)
-        }
+        authorizedUserService.getLoggedInUserViaToken("Bearer $token")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    Log.d("mLog", it.toString())
+                    textView.text = it.toString()
+                },
+                onError = {
+                    Log.d("mLog", it.toString())
+                }
+            ).addTo(compositeDisposable)
+    }
+
+
+    private fun deleteUser() {
+        authorizedUserService.deleteUser("Bearer $token")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    Log.d("mLog", it.toString())
+                    textView.text = it.toString()
+                },
+                onError = {
+                    Log.d("mLog", it.toString())
+                }
+            ).addTo(compositeDisposable)
     }
 
     private fun clearTextView() {
         textView.text = ""
-    }
-
-
-    private fun setResponse(userResponse: UserResponse) {
-        textView.text = userResponse.toString()
     }
 
 
@@ -111,21 +158,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         compositeDisposable.clear()
     }
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.buttonLogin -> {
-                login()
-            }
 
-            R.id.buttonClear -> {
-                clearTextView()
-            }
-            R.id.buttonLogout ->{
-                logout()
-            }
-            R.id.buttonGetLogged ->{
-                getLoggedInUserViaToken()
-            }
-        }
-    }
 }
