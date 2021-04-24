@@ -2,42 +2,48 @@ package com.example.todolistapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.todolistapp.data.models.UserRequest
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.example.todolistapp.presentation.login.LoginFragment
+import com.example.todolistapp.presentation.welcome.WelcomeFragment
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Router {
 
     private val unauthorizedUserService = RetrofitHolder.unauthorizedUserService
     private val authorizedUserService = RetrofitHolder.authorizedUserService
     private var compositeDisposable = CompositeDisposable()
     private var response: String = ""
-    private var token = ""
-    private var prefsHelp: AppPreferencesHelper? = null
-
 
     @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        prefsHelp = AppPreferencesHelper(this, "Shared_Preferences_Demo")
+
+        if (savedInstanceState == null) {
+            val welcomeFragment = WelcomeFragment.newInstance()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, welcomeFragment)
+                .commit()
+        }
+
+        //prefsHelp = AppPreferencesHelper(BaseApplication.instance.baseContext)
 
 
-        buttonLogin.setOnClickListener { login() }
+        /*buttonLogin.setOnClickListener { login() }
         buttonLogout.setOnClickListener { logout() }
         buttonGetLogged.setOnClickListener { getLoggedInUserViaToken() }
         buttonDeleteUser.setOnClickListener { deleteUser() }
         buttonClear.setOnClickListener { clearTextView() }
-        //buttonUpdateUserProfile.setOnClickListener { updateUser() }
-        //buttonRegisterUser.setOnClickListener { registerUser() }
+        // buttonUpdateUserProfile.setOnClickListener { updateUser() }
+        //buttonRegisterUser.setOnClickListener { registerUser() }*/
     }
 
+    override fun navigateToLoginScreen() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerView, LoginFragment.newInstance())
+            .addToBackStack(null)
+            .commit()
+    }
 
     /*private fun registerUser() {
         val body = UserRegisterRequest(
@@ -59,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("mLog", it.toString())
                 }
             ).addTo(compositeDisposable)
-    }*/
+    }
 
     private fun login() {
         val body = UserRequest(
@@ -82,8 +88,7 @@ class MainActivity : AppCompatActivity() {
         prefsHelp?.setToken(token)
     }
 
-
-    /*private fun updateUser() {
+    private fun updateUser() {
         val body = UserUpdateRequest(25)
         authorizedUserService.updateUser("Bearer $token", body)
             .subscribeOn(Schedulers.io())
@@ -97,9 +102,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("mLog", it.toString())
                 }
             ).addTo(compositeDisposable)
-    }*/
-
-
+    }
 
     private fun logout() {
         authorizedUserService.logoutUser("Bearer $token")
@@ -116,7 +119,6 @@ class MainActivity : AppCompatActivity() {
             ).addTo(compositeDisposable)
     }
 
-
     private fun getLoggedInUserViaToken() {
         authorizedUserService.getLoggedInUserViaToken("Bearer $token")
             .subscribeOn(Schedulers.io())
@@ -131,7 +133,6 @@ class MainActivity : AppCompatActivity() {
                 }
             ).addTo(compositeDisposable)
     }
-
 
     private fun deleteUser() {
         authorizedUserService.deleteUser("Bearer $token")
@@ -152,11 +153,14 @@ class MainActivity : AppCompatActivity() {
         textView.text = ""
     }
 
-
     override fun onPause() {
         super.onPause()
         compositeDisposable.clear()
-    }
+    }*/
+}
 
+interface Router {
+
+    fun navigateToLoginScreen()
 
 }

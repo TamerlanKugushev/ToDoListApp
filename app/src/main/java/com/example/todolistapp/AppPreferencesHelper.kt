@@ -2,29 +2,29 @@ package com.example.todolistapp
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
-class AppPreferencesHelper : PreferencesHelper {
-    private val PREF_KEY_ACCESS_TOKEN = "PREF_KEY_ACCESS_TOKEN"
+class AppPreferencesHelper(context: Context) : PreferencesHelper {
 
-    private val PREF_KEY_USER_LOGIN_STATUS = "PREF_KEY_USER_LOGIN_STATUS"
+    companion object {
+        private const val TOKEN_PREF_NAME = "Shared_Preferences_Demo"
+        private const val PREF_KEY_ACCESS_TOKEN = "PREF_KEY_ACCESS_TOKEN"
+    }
 
     private var mPrefs: SharedPreferences? = null
 
-    constructor(context: Context, prefFileName: String?) {
-        mPrefs = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
+    init {
+        mPrefs = context.getSharedPreferences(TOKEN_PREF_NAME, Context.MODE_PRIVATE)
     }
-
-companion object{
-
-}
 
     override fun getToken(): String? {
         return mPrefs?.getString(PREF_KEY_ACCESS_TOKEN, null);
-
     }
 
     override fun setToken(accessToken: String?) {
-        mPrefs?.edit()?.putString(PREF_KEY_ACCESS_TOKEN, accessToken)?.apply();
+        mPrefs?.edit {
+            putString(PREF_KEY_ACCESS_TOKEN, accessToken)
+        }
     }
 
 
