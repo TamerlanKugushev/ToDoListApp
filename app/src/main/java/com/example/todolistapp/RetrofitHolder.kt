@@ -33,9 +33,8 @@ object RetrofitHolder {
         return provideOkHttpClientBuilder().apply {
             if (hasToken) {
                 addInterceptor(TokenInterceptor())
-            } else {
-                addInterceptor(ContentTypeInterceptor())
             }
+            addInterceptor(ContentTypeInterceptor())
         }.build()
     }
 
