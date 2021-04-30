@@ -1,4 +1,4 @@
-package com.example.todolistapp.presentation.welcome
+package com.example.todolistapp.ui.welcome
 
 import android.content.Context
 import android.os.Bundle
@@ -43,7 +43,7 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         emailButton.setOnClickListener {
-            router?.navigateToLoginScreen()
+            router?.navigateToRegistrationScreen()
         }
     }
 }

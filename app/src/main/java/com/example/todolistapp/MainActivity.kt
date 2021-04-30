@@ -3,10 +3,11 @@ package com.example.todolistapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.todolistapp.presentation.login.LoginFragment
-import com.example.todolistapp.presentation.password.PasswordFragment
-import com.example.todolistapp.presentation.registration.RegistrationFragment
-import com.example.todolistapp.presentation.welcome.WelcomeFragment
+import com.example.todolistapp.ui.login.LoginFragment
+import com.example.todolistapp.ui.registration.RegistrationFragment
+import com.example.todolistapp.ui.tasks.AddTaskFragment
+import com.example.todolistapp.ui.tasks.TasksFragment
+import com.example.todolistapp.ui.welcome.WelcomeFragment
 import io.reactivex.disposables.CompositeDisposable
 
 class MainActivity : AppCompatActivity(), Router {
@@ -34,34 +35,44 @@ class MainActivity : AppCompatActivity(), Router {
     }
 
 
-    override fun navigateToRegistrationScreen(email: String) {
+    override fun navigateToRegistrationScreen() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, RegistrationFragment.newInstance(email))
+            .replace(R.id.fragmentContainer, RegistrationFragment.newInstance())
             .addToBackStack(null)
             .commit()
     }
 
 
-    override fun navigateToLoginScreen() {
+    override fun navigateToLoginScreen(email: String, password: String) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, LoginFragment.newInstance())
+            .replace(R.id.fragmentContainer, LoginFragment.newInstance(email, password))
             .addToBackStack(null)
             .commit()
     }
 
-    override fun navigateToPasswordScreen() {
+
+    override fun navigateToTasksScreen() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, PasswordFragment.newInstance())
+            .replace(R.id.fragmentContainer, TasksFragment.newInstance())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun navigateToAddTaskScreen() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainer, AddTaskFragment.newInstance())
             .addToBackStack(null)
             .commit()
     }
 }
 
 interface Router {
-    fun navigateToRegistrationScreen(email: String)
-    fun navigateToLoginScreen()
-    fun navigateToPasswordScreen()
+    fun navigateToRegistrationScreen()
+    fun navigateToLoginScreen(email: String, password: String)
+    fun navigateToTasksScreen()
+    fun navigateToAddTaskScreen()
 }

@@ -1,8 +1,8 @@
-package com.example.todolistapp.data.models
+package com.example.todolistapp.data.models.login
 
 import com.google.gson.annotations.SerializedName
 
-data class UserRequest(
+data class UserLoginRequest(
     @SerializedName("email")
     val email: String,
 
