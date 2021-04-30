@@ -7,8 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.example.todolistapp.R
-import com.example.todolistapp.Router
+import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.repositories.Repository
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,17 +17,24 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_add.*
 
-class AddTaskFragment : BottomSheetDialogFragment() {
-
+class AddTaskDialog : BottomSheetDialogFragment() {
 
     companion object {
-        @JvmStatic
-        fun newInstance(): AddTaskFragment {
-            return AddTaskFragment()
+
+        private const val TAG = "AddTaskFragment"
+
+        fun show(fragmentManager: FragmentManager) {
+            val dialog = newInstance()
+            dialog.show(fragmentManager, TAG)
+        }
+
+        private fun newInstance(): AddTaskDialog {
+            return AddTaskDialog()
         }
     }
 
-    private var router: Router? = null
+    private var addTaskListener: AddTaskListener? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,14 +45,16 @@ class AddTaskFragment : BottomSheetDialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is Router) {
-            router = context
+
+        val parentFragment = parentFragment
+        if (parentFragment is AddTaskListener) {
+            addTaskListener = parentFragment
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        router = null
+        addTaskListener = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,12 +72,17 @@ class AddTaskFragment : BottomSheetDialogFragment() {
             .subscribeBy(
                 onSuccess = {
                     Repository.taskList.add(it)
-                    router?.navigateToTasksScreen()
+                    addTaskListener?.onTaskAdded(it)
                     Log.i("ADD", it.toString())
+                    dismiss()
                 },
                 onError = {
                     Log.i("ADD", it.toString())
                 }
             )
     }
+}
+
+interface AddTaskListener {
+    fun onTaskAdded(task: TaskResponse)
 }

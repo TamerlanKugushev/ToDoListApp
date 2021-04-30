@@ -3,10 +3,10 @@ package com.example.todolistapp.ui.login
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
 import com.example.todolistapp.data.repositories.Repository
@@ -17,16 +17,14 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_login.*
 
-private var EMAIL_KEY: String? = "email"
-private var PASSWORD_KEY: String? = "password"
-
 class LoginFragment : Fragment() {
-    private var email: String? = null
-    private var password: String? = null
 
     companion object {
-        @JvmStatic
-        fun newInstance(email: String,password: String) =
+
+        private var EMAIL_KEY: String? = "email"
+        private var PASSWORD_KEY: String? = "password"
+
+        fun newInstance(email: String, password: String) =
             LoginFragment().apply {
                 arguments = Bundle().apply {
                     putString(EMAIL_KEY, email)
@@ -34,6 +32,11 @@ class LoginFragment : Fragment() {
                 }
             }
     }
+
+    private var email: String? = null
+    private var password: String? = null
+    private var router: Router? = null
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +48,12 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private var router: Router? = null
-    private var compositeDisposable = CompositeDisposable()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Router) {
+            router = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,23 +62,21 @@ class LoginFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Router) {
-            router = context
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        router = null
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         continueButton.setOnClickListener {
             register()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        router = null
     }
 
     private fun register() {
@@ -91,11 +96,6 @@ class LoginFragment : Fragment() {
                     Log.e("REGISTRATION", it.toString())
                 }
             ).addTo(compositeDisposable)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        compositeDisposable.clear()
     }
 
 }

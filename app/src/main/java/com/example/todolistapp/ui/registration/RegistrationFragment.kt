@@ -3,10 +3,10 @@ package com.example.todolistapp.ui.registration
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
 import com.example.todolistapp.data.repositories.Repository
@@ -20,12 +20,12 @@ import kotlinx.android.synthetic.main.fragment_registration.*
 class RegistrationFragment : Fragment() {
 
     companion object {
-        @JvmStatic
         fun newInstance() = RegistrationFragment()
     }
 
     private var router: Router? = null
-    private var compositeDisposable = CompositeDisposable()
+    private val compositeDisposable = CompositeDisposable()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,16 +48,19 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Переход на экран регистрации
-        buttonRegistration.setOnClickListener {
-            router?.navigateToLoginScreen(
-                editTextEmailRegistration.text.toString().trim(),
-                editTextPasswordRegistration.text.toString().trim()
-            )
+        registerButton.setOnClickListener {
+            navigateToLoginScreen()
         }
         //Переход на экран задач
-        buttonSignIn.setOnClickListener {
+        signInButton.setOnClickListener {
             login()
         }
+    }
+
+    private fun navigateToLoginScreen() {
+        val email = editTextEmailRegistration.text.toString().trim()
+        val password = editTextPasswordRegistration.text.toString().trim()
+        router?.navigateToLoginScreen(email, password)
     }
 
     private fun login() {
