@@ -1,4 +1,4 @@
-package com.example.todolistapp.data.models
+package com.example.todolistapp.data.models.registration
 
 import com.google.gson.annotations.SerializedName
 

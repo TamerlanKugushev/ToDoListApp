@@ -2,15 +2,15 @@ package com.example.todolistapp.data.models
 
 import com.google.gson.annotations.SerializedName
 
-data class UserResponse(
+data class UserLoginResponse(
     @SerializedName("user")
-    val user: User,
+    val user: UserLogin,
 
     @SerializedName("token")
     val token: String
 )
 
-data class User(
+data class UserLogin(
     @SerializedName("name")
     val name: String,
 
