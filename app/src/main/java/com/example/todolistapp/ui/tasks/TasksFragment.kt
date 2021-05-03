@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
 import com.example.todolistapp.adapters.TasksAdapter
+import com.example.todolistapp.data.models.task.TaskRequest
+import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.repositories.Repository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -16,10 +18,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.*
 
-class TasksFragment : Fragment() {
-
+class TasksFragment : Fragment(), AddTaskListener {
     companion object {
-        @JvmStatic
         fun newInstance(): TasksFragment {
             return TasksFragment()
         }
@@ -27,6 +27,7 @@ class TasksFragment : Fragment() {
 
     private var router: Router? = null
 
+    private lateinit var tasksAdapter: TasksAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,19 +43,16 @@ class TasksFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        router = null
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.inflateMenu(R.menu.menu_tasks_fragment)
         toolbar.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
-        val tasksAdapter = TasksAdapter()
+
+        tasksAdapter = TasksAdapter()
         val recyclerView = view.recyclerViewTasks
+        recyclerView.setHasFixedSize(true)
         recyclerView.adapter = tasksAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         tasksAdapter.setData(Repository.taskList)
@@ -62,8 +60,13 @@ class TasksFragment : Fragment() {
 
 
         floatingActionButtonAddTask.setOnClickListener {
-            router?.navigateToAddTaskScreen()
+            AddTaskDialog.show(childFragmentManager)
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        router = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -111,4 +114,10 @@ class TasksFragment : Fragment() {
         }
 
     }
+
+    override fun onTaskAdded(task: TaskResponse) {
+        tasksAdapter.addTask(task)
+    }
 }
+
+

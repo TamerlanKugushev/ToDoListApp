@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_welcome.*
 class WelcomeFragment : Fragment() {
 
     companion object {
-        @JvmStatic
         fun newInstance(): WelcomeFragment {
             return WelcomeFragment()
         }
@@ -43,7 +42,7 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         emailButton.setOnClickListener {
-            router?.navigateToRegistrationScreen()
+            router?.navigateToSignInScreen()
         }
     }
 }

@@ -17,21 +17,16 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_registration.*
 
-class RegistrationFragment : Fragment() {
+class SignInFragment : Fragment() {
 
     companion object {
-        @JvmStatic
-        fun newInstance() = RegistrationFragment()
+        fun newInstance(): SignInFragment {
+            return SignInFragment()
+        }
     }
 
     private var router: Router? = null
     private var compositeDisposable = CompositeDisposable()
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_registration, container, false)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,24 +35,39 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        router = null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_registration, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Переход на экран регистрации
-        buttonRegistration.setOnClickListener {
-            router?.navigateToLoginScreen(
-                editTextEmailRegistration.text.toString().trim(),
-                editTextPasswordRegistration.text.toString().trim()
-            )
+        registerButton.setOnClickListener {
+            navigateToRegScreen()
         }
         //Переход на экран задач
-        buttonSignIn.setOnClickListener {
+        signInButton.setOnClickListener {
             login()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        router = null
+    }
+
+    private fun navigateToRegScreen() {
+        val email = editTextEmailRegistration.text.toString().trim()
+        val password = editTextPasswordRegistration.text.toString().trim()
+        router?.navigateToRegistrationScreen(email, password)
     }
 
     private fun login() {
@@ -77,11 +87,6 @@ class RegistrationFragment : Fragment() {
                     Log.e("LOGIN", it.toString())
                 }
             ).addTo(compositeDisposable)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        compositeDisposable.clear()
     }
 
 }

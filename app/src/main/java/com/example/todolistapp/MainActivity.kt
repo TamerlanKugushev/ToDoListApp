@@ -3,9 +3,8 @@ package com.example.todolistapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.todolistapp.ui.login.LoginFragment
-import com.example.todolistapp.ui.registration.RegistrationFragment
-import com.example.todolistapp.ui.tasks.AddTaskFragment
+import com.example.todolistapp.ui.login.RegistrationFragment
+import com.example.todolistapp.ui.registration.SignInFragment
 import com.example.todolistapp.ui.tasks.TasksFragment
 import com.example.todolistapp.ui.welcome.WelcomeFragment
 import io.reactivex.disposables.CompositeDisposable
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity(), Router {
         //prefsHelp = AppPreferencesHelper(this)
 
         if (savedInstanceState == null) {
-            val welcomeFragment = WelcomeFragment()
+            val welcomeFragment = WelcomeFragment.newInstance()
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, welcomeFragment)
@@ -35,19 +34,19 @@ class MainActivity : AppCompatActivity(), Router {
     }
 
 
-    override fun navigateToRegistrationScreen() {
+    override fun navigateToSignInScreen() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, RegistrationFragment.newInstance())
+            .replace(R.id.fragmentContainer, SignInFragment.newInstance())
             .addToBackStack(null)
             .commit()
     }
 
 
-    override fun navigateToLoginScreen(email: String, password: String) {
+    override fun navigateToRegistrationScreen(email: String, password: String) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, LoginFragment.newInstance(email, password))
+            .replace(R.id.fragmentContainer, RegistrationFragment.newInstance(email, password))
             .addToBackStack(null)
             .commit()
     }
@@ -61,18 +60,10 @@ class MainActivity : AppCompatActivity(), Router {
             .commit()
     }
 
-    override fun navigateToAddTaskScreen() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainer, AddTaskFragment.newInstance())
-            .addToBackStack(null)
-            .commit()
-    }
 }
 
 interface Router {
-    fun navigateToRegistrationScreen()
-    fun navigateToLoginScreen(email: String, password: String)
+    fun navigateToSignInScreen()
+    fun navigateToRegistrationScreen(email: String, password: String)
     fun navigateToTasksScreen()
-    fun navigateToAddTaskScreen()
 }

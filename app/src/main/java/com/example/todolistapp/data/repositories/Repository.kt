@@ -1,6 +1,5 @@
 package com.example.todolistapp.data.repositories
 
-import android.app.ActivityManager
 import com.example.todolistapp.AppPreferencesHelper
 import com.example.todolistapp.BaseApplication
 import com.example.todolistapp.RetrofitHolder
@@ -10,6 +9,7 @@ import com.example.todolistapp.data.models.delete.UserDeleteResponse
 import com.example.todolistapp.data.models.logout.UserLogoutResponse
 import com.example.todolistapp.data.models.registration.UserRegisterRequest
 import com.example.todolistapp.data.models.registration.UserRegisterResponse
+import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
 import io.reactivex.Single
 
@@ -69,12 +69,17 @@ object Repository {
             }
     }
 
+
     fun addTask(description: String): Single<TaskResponse> {
 
+        val taskRequest = TaskRequest(description = description)
         return authorizedUserService
-            .addTask(prefsHelper.getToken())
+            .addTask(
+                prefsHelper.getToken(),
+                taskRequest
+            )
             .map { taskResponse ->
-                taskResponse.description = description
+                taskResponse.task.description = taskRequest.description
                 taskResponse
             }
     }
