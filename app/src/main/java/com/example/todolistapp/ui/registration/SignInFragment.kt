@@ -2,22 +2,16 @@ package com.example.todolistapp.ui.registration
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
-import com.example.todolistapp.data.repositories.Repository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
+import com.example.todolistapp.utils.BaseFragment
+import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_registration.*
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseFragment(), SignInView {
 
     companion object {
         fun newInstance(): SignInFragment {
@@ -25,8 +19,21 @@ class SignInFragment : Fragment() {
         }
     }
 
+    private lateinit var presenter: SignInPresenter
     private var router: Router? = null
-    private var compositeDisposable = CompositeDisposable()
+
+    override fun attachPresenter() {
+        val presenter = PresentersStorage.getPresenter(viewId)
+        if (presenter !is SignInPresenter) {
+            this.presenter = SignInPresenter()
+            return
+        }
+        this.presenter = presenter
+    }
+
+    override fun getPresenter(): SignInPresenter {
+        return presenter
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,17 +53,25 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //Переход на экран регистрации
         registerButton.setOnClickListener {
-            navigateToRegScreen()
+            onRegisterButtonClicked()
         }
         //Переход на экран задач
         signInButton.setOnClickListener {
-            login()
+            //login()
+            presenter.increaseCounter()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        presenter.bindView(this)
     }
 
     override fun onStop() {
         super.onStop()
-        compositeDisposable.clear()
+
+        presenter.unbindView()
     }
 
     override fun onDetach() {
@@ -64,29 +79,29 @@ class SignInFragment : Fragment() {
         router = null
     }
 
-    private fun navigateToRegScreen() {
-        val email = editTextEmailRegistration.text.toString().trim()
-        val password = editTextPasswordRegistration.text.toString().trim()
-        router?.navigateToRegistrationScreen(email, password)
+    private fun onRegisterButtonClicked() {
+        presenter.onRegisterButtonClicked(
+            email = editTextEmailRegistration.text.toString(),
+            password = editTextPasswordRegistration.text.toString()
+        )
     }
 
     private fun login() {
-        val email = editTextEmailRegistration.text.toString().trim()
-        val password = editTextPasswordRegistration.text.toString().trim()
-
-        Repository
-            .loginUser(email, password)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onSuccess = {
-                    router?.navigateToTasksScreen()
-                    Log.i("LOGIN", it.toString())
-                },
-                onError = {
-                    Log.e("LOGIN", it.toString())
-                }
-            ).addTo(compositeDisposable)
+        presenter.login(
+            email = editTextEmailRegistration.text.toString(),
+            password = editTextPasswordRegistration.text.toString()
+        )
     }
 
+    override fun navigateToRegistrationScreen(email: String, password: String) {
+        router?.navigateToRegistrationScreen(email, password)
+    }
+
+    override fun navigateToTasksScreen() {
+        router?.navigateToTasksScreen()
+    }
+
+    override fun updateCounter(counter: Int) {
+        counterTextView.text = counter.toString()
+    }
 }
