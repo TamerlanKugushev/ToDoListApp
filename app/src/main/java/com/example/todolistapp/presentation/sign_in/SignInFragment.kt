@@ -1,4 +1,4 @@
-package com.example.todolistapp.ui.registration
+package com.example.todolistapp.presentation.sign_in
 
 import android.content.Context
 import android.os.Bundle
@@ -79,6 +79,18 @@ class SignInFragment : BaseFragment(), SignInView {
         router = null
     }
 
+    override fun navigateToRegistrationScreen(email: String, password: String) {
+        router?.navigateToRegistrationScreen(email, password)
+    }
+
+    override fun navigateToTasksScreen() {
+        router?.navigateToTasksScreen()
+    }
+
+    override fun updateCounter(counter: Int) {
+        counterTextView.text = counter.toString()
+    }
+
     private fun onRegisterButtonClicked() {
         presenter.onRegisterButtonClicked(
             email = editTextEmailRegistration.text.toString(),
@@ -91,17 +103,5 @@ class SignInFragment : BaseFragment(), SignInView {
             email = editTextEmailRegistration.text.toString(),
             password = editTextPasswordRegistration.text.toString()
         )
-    }
-
-    override fun navigateToRegistrationScreen(email: String, password: String) {
-        router?.navigateToRegistrationScreen(email, password)
-    }
-
-    override fun navigateToTasksScreen() {
-        router?.navigateToTasksScreen()
-    }
-
-    override fun updateCounter(counter: Int) {
-        counterTextView.text = counter.toString()
     }
 }

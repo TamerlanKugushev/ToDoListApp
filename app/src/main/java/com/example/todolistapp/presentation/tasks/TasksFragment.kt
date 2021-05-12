@@ -1,4 +1,4 @@
-package com.example.todolistapp.ui.tasks
+package com.example.todolistapp.presentation.tasks
 
 import android.content.Context
 import android.os.Bundle
@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
-import com.example.todolistapp.adapters.TasksAdapter
-import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.repositories.Repository
+import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers

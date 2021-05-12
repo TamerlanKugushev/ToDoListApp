@@ -1,15 +1,15 @@
-package com.example.todolistapp.ui.login
+package com.example.todolistapp.presentation.login
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
-import com.example.todolistapp.data.repositories.Repository
+import com.example.todolistapp.domain.AuthorizationInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -34,6 +34,8 @@ class RegistrationFragment : Fragment() {
                 }
             }
     }
+
+    private val authorizationInteractor = AuthorizationInteractor()
 
     private var email: String? = null
     private var password: String? = null
@@ -83,11 +85,10 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun register() {
-        val name = nameEditText.text.toString().trim()
-        val age = ageEditText.text.toString().trim()
+        val name = nameEditText.text.toString()
+        val age = ageEditText.text.toString()
 
-        Repository
-            .registerUser(name, password ?: "", email ?: "", age.toInt())
+        authorizationInteractor.registerUser(name, password, email, age)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

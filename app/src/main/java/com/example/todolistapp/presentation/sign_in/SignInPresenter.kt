@@ -1,7 +1,7 @@
-package com.example.todolistapp.ui.registration
+package com.example.todolistapp.presentation.sign_in
 
 import android.util.Log
-import com.example.todolistapp.data.repositories.Repository
+import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.utils.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -12,6 +12,8 @@ class SignInPresenter: BasePresenter<SignInView>() {
 
     private var counter: Int = 0
 
+    private val authorizationInteractor = AuthorizationInteractor()
+
     override fun bindView(view: SignInView) {
         super.bindView(view)
 
@@ -19,8 +21,7 @@ class SignInPresenter: BasePresenter<SignInView>() {
     }
 
     fun login(email: String, password: String) {
-        Repository
-            .loginUser(email.trim(), password.trim())
+        authorizationInteractor.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

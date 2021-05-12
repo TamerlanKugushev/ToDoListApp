@@ -1,11 +1,11 @@
-package com.example.todolistapp.ui.welcome
+package com.example.todolistapp.presentation.welcome
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
 import kotlinx.android.synthetic.main.fragment_welcome.*

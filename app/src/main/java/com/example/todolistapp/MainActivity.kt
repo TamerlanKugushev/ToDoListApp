@@ -3,30 +3,31 @@ package com.example.todolistapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.todolistapp.ui.login.RegistrationFragment
-import com.example.todolistapp.ui.registration.SignInFragment
-import com.example.todolistapp.ui.tasks.TasksFragment
-import com.example.todolistapp.ui.welcome.WelcomeFragment
-import io.reactivex.disposables.CompositeDisposable
+import com.example.todolistapp.data.repositories.Repository
+import com.example.todolistapp.presentation.login.RegistrationFragment
+import com.example.todolistapp.presentation.sign_in.SignInFragment
+import com.example.todolistapp.presentation.tasks.TasksFragment
+import com.example.todolistapp.presentation.welcome.WelcomeFragment
 
 class MainActivity : AppCompatActivity(), Router {
-
-    private val unauthorizedUserService = RetrofitHolder.unauthorizedUserService
-    private val authorizedUserService = RetrofitHolder.authorizedUserService
-    private var compositeDisposable = CompositeDisposable()
 
 
     @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //prefsHelp = AppPreferencesHelper(this)
 
         if (savedInstanceState == null) {
-            val welcomeFragment = WelcomeFragment.newInstance()
+
+            val initFragment = if (Repository.isUserAuthorized()) {
+                TasksFragment.newInstance()
+            } else {
+                WelcomeFragment.newInstance()
+            }
+
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, welcomeFragment)
+                .replace(R.id.fragmentContainer, initFragment)
                 .commit()
         }
 

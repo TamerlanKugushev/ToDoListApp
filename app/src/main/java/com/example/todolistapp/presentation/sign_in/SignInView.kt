@@ -1,4 +1,4 @@
-package com.example.todolistapp.ui.registration
+package com.example.todolistapp.presentation.sign_in
 
 import com.example.todolistapp.utils.BaseView
 

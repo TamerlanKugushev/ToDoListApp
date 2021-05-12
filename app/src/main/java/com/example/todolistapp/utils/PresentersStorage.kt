@@ -2,7 +2,7 @@ package com.example.todolistapp.utils
 
 object PresentersStorage {
 
-    private val presenters = hashMapOf<String, BasePresenter<*>>()
+    private val presenters = hashMapOf<String, BasePresenter<out BaseView>>()
 
     fun getPresenter(viewId: String): BasePresenter<*>? {
         return presenters[viewId]

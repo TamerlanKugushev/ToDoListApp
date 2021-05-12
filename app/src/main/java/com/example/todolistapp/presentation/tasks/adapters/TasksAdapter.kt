@@ -1,11 +1,10 @@
-package com.example.todolistapp.adapters
+package com.example.todolistapp.presentation.tasks.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistapp.R
-import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
 import kotlinx.android.synthetic.main.task_item.view.*
 

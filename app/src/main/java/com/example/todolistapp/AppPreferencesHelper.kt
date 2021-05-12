@@ -22,11 +22,15 @@ class AppPreferencesHelper(context: Context) : PreferencesHelper {
 
     }
 
-    override fun setToken(accessToken: String?) {
+    override fun setToken(accessToken: String) {
         mPrefs?.edit {
             putString(PREF_KEY_ACCESS_TOKEN, accessToken)
         }
     }
 
-
+    override fun removeToken() {
+        mPrefs?.edit {
+            remove(PREF_KEY_ACCESS_TOKEN)
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.todolistapp.ui.tasks
+package com.example.todolistapp.presentation.tasks
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.example.todolistapp.R
-import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.repositories.Repository
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
