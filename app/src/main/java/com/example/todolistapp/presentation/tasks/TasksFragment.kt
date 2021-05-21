@@ -2,27 +2,19 @@ package com.example.todolistapp.presentation.tasks
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
-import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
-import com.example.todolistapp.data.models.task.TaskResponse
-import com.example.todolistapp.data.repositories.Repository
+import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.presentation.add_task.AddTaskDialog
 import com.example.todolistapp.presentation.add_task.AddTaskListener
-import com.example.todolistapp.presentation.sign_in.SignInPresenter
+import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.utils.BaseFragment
-import com.example.todolistapp.utils.BasePresenter
-import com.example.todolistapp.utils.BaseView
 import com.example.todolistapp.utils.PresentersStorage
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.*
+
 
 class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
@@ -106,25 +98,27 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
                 presenter.deleteUser()
                 true
             }
-
             R.id.exit -> {
                 presenter.logout()
                 true
             }
-
             else -> {
                 super.onOptionsItemSelected(item)
             }
         }
-
     }
 
-    override fun onTaskAdded(task: TaskResponse) {
-        tasksAdapter.addTask(task)
+    override fun onTaskAdded(task: Task) {
+        presenter.onTaskAdded(task)
     }
 
     override fun navigateToSignInScreen() {
         router?.openRootSignInScreen()
+    }
+
+    override fun updateTaskList(tasks: List<Task>) {
+        val listCopy = tasks.toMutableList().map { it.copy() }
+        tasksAdapter.submitList(listCopy)
     }
 }
 

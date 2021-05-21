@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class AddTaskPresenter : BasePresenter<AddTaskView>() {
 
@@ -19,6 +20,7 @@ class AddTaskPresenter : BasePresenter<AddTaskView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
+                    it.task.id = UUID.randomUUID().toString()
                     getView()?.addTask(it)
                     Log.i("ADD", it.toString())
                 },
