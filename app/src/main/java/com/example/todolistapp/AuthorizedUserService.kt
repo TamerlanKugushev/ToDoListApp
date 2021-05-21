@@ -3,6 +3,7 @@ package com.example.todolistapp
 import com.example.todolistapp.data.models.*
 import com.example.todolistapp.data.models.delete.UserDeleteResponse
 import com.example.todolistapp.data.models.logout.UserLogoutResponse
+import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.models.update.UserUpdateRequest
 import io.reactivex.Single
@@ -28,7 +29,10 @@ interface AuthorizedUserService {
 
 
     @POST("task")
-    fun addTask(@Header("Authorization") token: String?): Single<TaskResponse>
+    fun addTask(
+        @Header("Authorization") token: String?,
+        @Body body: TaskRequest
+    ): Single<TaskResponse>
 
 
 }

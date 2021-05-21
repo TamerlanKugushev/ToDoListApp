@@ -1,4 +1,4 @@
-package com.example.todolistapp.ui.welcome
+package com.example.todolistapp.presentation.welcome
 
 import android.content.Context
 import android.os.Bundle
@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_welcome.*
 class WelcomeFragment : Fragment() {
 
     companion object {
-        @JvmStatic
         fun newInstance(): WelcomeFragment {
             return WelcomeFragment()
         }
@@ -42,8 +41,8 @@ class WelcomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        emailButton.setOnClickListener {
-            router?.navigateToRegistrationScreen()
+        email_btn.setOnClickListener {
+            router?.navigateToLoginScreen()
         }
     }
 }
