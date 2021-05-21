@@ -1,27 +1,22 @@
-package com.example.todolistapp.ui.tasks
+package com.example.todolistapp.presentation.add_task
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.example.todolistapp.R
-import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
-import com.example.todolistapp.data.repositories.Repository
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
+import com.example.todolistapp.utils.BaseBottomSheetDialogFragment
+import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_add.*
 
-class AddTaskDialog : BottomSheetDialogFragment(){
-
+class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
 
     companion object {
+
         private const val TAG = "AddTaskFragment"
 
         fun show(fragmentManager: FragmentManager) {
@@ -34,6 +29,7 @@ class AddTaskDialog : BottomSheetDialogFragment(){
         }
     }
 
+    private lateinit var presenter: AddTaskPresenter
     private var addTaskListener: AddTaskListener? = null
 
     override fun onAttach(context: Context) {
@@ -52,6 +48,19 @@ class AddTaskDialog : BottomSheetDialogFragment(){
         return inflater.inflate(R.layout.fragment_add, container, false)
     }
 
+    override fun attachPresenter() {
+        val presenter = PresentersStorage.getPresenter(viewId)
+        if (presenter !is AddTaskPresenter) {
+            this.presenter = AddTaskPresenter()
+            return
+        }
+        this.presenter = presenter
+    }
+
+    override fun getPresenter(): AddTaskPresenter {
+        return presenter
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         add_btn.setOnClickListener {
@@ -59,32 +68,31 @@ class AddTaskDialog : BottomSheetDialogFragment(){
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        presenter.bindView(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.unbindView()
+    }
+
     override fun onDetach() {
         super.onDetach()
         addTaskListener = null
     }
 
+    override fun addTask(task: TaskResponse) {
+        addTaskListener?.onTaskAdded(task)
+        dismiss()
+    }
+
 
     @SuppressLint("CheckResult")
     private fun addTask() {
-        val descriptionOfTask = addEditTextDescriptionOfTask.text.toString()
-        Repository
-            .addTask(descriptionOfTask)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onSuccess = {
-                    //Repository.taskList.add()
-                    //addTaskListener?.onTaskAdded(it)
-                    val taskResponse = it
-                    addTaskListener?.onTaskAdded(it)
-                    Log.i("ADD", it.toString())
-                    dismiss()
-                },
-                onError = {
-                    Log.i("ADD", it.toString())
-                }
-            )
+        val descriptionOfTask = descriptionOfTask.text.toString()
+        presenter.addTask(descriptionOfTask)
     }
 
 }

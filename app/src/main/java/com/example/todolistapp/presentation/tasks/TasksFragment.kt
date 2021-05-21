@@ -1,4 +1,4 @@
-package com.example.todolistapp.ui.tasks
+package com.example.todolistapp.presentation.tasks
 
 import android.content.Context
 import android.os.Bundle
@@ -8,17 +8,24 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
-import com.example.todolistapp.adapters.TasksAdapter
-import com.example.todolistapp.data.models.task.TaskRequest
+import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.repositories.Repository
+import com.example.todolistapp.presentation.add_task.AddTaskDialog
+import com.example.todolistapp.presentation.add_task.AddTaskListener
+import com.example.todolistapp.presentation.sign_in.SignInPresenter
+import com.example.todolistapp.utils.BaseFragment
+import com.example.todolistapp.utils.BasePresenter
+import com.example.todolistapp.utils.BaseView
+import com.example.todolistapp.utils.PresentersStorage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.*
 
-class TasksFragment : Fragment(), AddTaskListener {
+class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
+
     companion object {
         fun newInstance(): TasksFragment {
             return TasksFragment()
@@ -26,15 +33,8 @@ class TasksFragment : Fragment(), AddTaskListener {
     }
 
     private var router: Router? = null
-
     private lateinit var tasksAdapter: TasksAdapter
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tasks, container, false)
-    }
+    private lateinit var presenter: TasksPresenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,9 +43,31 @@ class TasksFragment : Fragment(), AddTaskListener {
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_tasks, container, false)
+    }
+
+    override fun attachPresenter() {
+        val presenter = PresentersStorage.getPresenter(viewId)
+        if (presenter !is TasksPresenter) {
+            this.presenter = TasksPresenter()
+            return
+        }
+        this.presenter = presenter
+    }
+
+    override fun getPresenter(): TasksPresenter {
+        return presenter
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.inflateMenu(R.menu.menu_tasks_fragment)
+
         toolbar.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
@@ -55,18 +77,22 @@ class TasksFragment : Fragment(), AddTaskListener {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = tasksAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        tasksAdapter.setData(Repository.taskList)
-        tasksAdapter.notifyDataSetChanged()
 
-
-        floatingActionButtonAddTask.setOnClickListener {
+        addTask_btn.setOnClickListener {
             AddTaskDialog.show(childFragmentManager)
         }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        presenter.bindView(this)
     }
 
     override fun onDetach() {
         super.onDetach()
         router = null
+        presenter.unbindView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -77,34 +103,12 @@ class TasksFragment : Fragment(), AddTaskListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete -> {
-                Repository
-                    .deleteUser()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(
-                        onSuccess = {
-                            Log.i("DELETE", it.toString())
-                        },
-                        onError = {
-                            Log.i("DELETE", it.toString())
-                        }
-                    )
+                presenter.deleteUser()
                 true
             }
 
             R.id.exit -> {
-                Repository
-                    .logout()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(
-                        onSuccess = {
-                            Log.i("LOGOUT", it.toString())
-                        },
-                        onError = {
-                            Log.i("LOGOUT", it.toString())
-                        }
-                    )
+                presenter.logout()
                 true
             }
 
@@ -117,6 +121,10 @@ class TasksFragment : Fragment(), AddTaskListener {
 
     override fun onTaskAdded(task: TaskResponse) {
         tasksAdapter.addTask(task)
+    }
+
+    override fun navigateToSignInScreen() {
+        router?.openRootSignInScreen()
     }
 }
 

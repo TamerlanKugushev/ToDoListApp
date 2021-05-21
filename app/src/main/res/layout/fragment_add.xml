@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tasks.AddTaskDialog">
+    tools:context=".presentation.add_task.AddTaskDialog">
 
 
 <View
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@id/view" />
 
     <EditText
-        android:id="@+id/addEditTextDescriptionOfTask"
+        android:id="@+id/descriptionOfTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -59,6 +59,6 @@
         android:text="Добавить задачу"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addEditTextDescriptionOfTask" />
+        app:layout_constraintTop_toBottomOf="@+id/descriptionOfTask" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
