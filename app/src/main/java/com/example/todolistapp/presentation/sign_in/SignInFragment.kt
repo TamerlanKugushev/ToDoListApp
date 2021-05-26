@@ -85,14 +85,6 @@ class SignInFragment : BaseFragment(), SignInView {
         router?.navigateToTasksScreen()
     }
 
-    override fun showProgressBar() {
-        signinProgressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgressBar() {
-        signinProgressBar.visibility=View.INVISIBLE
-    }
-
     private fun onRegisterButtonClicked() {
         presenter.onRegisterButtonClicked()
     }

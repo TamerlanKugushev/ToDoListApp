@@ -16,15 +16,12 @@ class SignInPresenter : BasePresenter<SignInView>() {
         authorizationInteractor.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { getView()?.showProgressBar() }
             .subscribeBy(
                 onSuccess = {
-                    getView()?.hideProgressBar()
                     getView()?.navigateToTasksScreen()
                     Log.i("LOGIN", it.toString())
                 },
                 onError = {
-                    getView()?.hideProgressBar()
                     Log.e("LOGIN", it.toString())
                 }
             ).addTo(viewCompositeDisposable)
@@ -33,5 +30,4 @@ class SignInPresenter : BasePresenter<SignInView>() {
     fun onRegisterButtonClicked() {
         getView()?.navigateToRegistrationScreen()
     }
-
 }

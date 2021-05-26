@@ -12,4 +12,8 @@ interface TasksView : BaseView {
 
     fun getAllTasks(tasks: List<Task>)
 
+    fun showProgressBar()
+
+    fun hideProgressBar()
+
 }

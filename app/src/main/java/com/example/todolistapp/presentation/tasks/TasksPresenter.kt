@@ -2,11 +2,9 @@ package com.example.todolistapp.presentation.tasks
 
 import android.util.Log
 import com.example.todolistapp.data.models.task.Task
-import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.domain.DeleteUserInteractor
 import com.example.todolistapp.domain.LogoutInteractor
 import com.example.todolistapp.domain.TasksInteractor
-import com.example.todolistapp.presentation.sign_in.SignInView
 import com.example.todolistapp.utils.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -28,6 +26,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
         super.bindView(view)
         getView()?.updateTaskList(taskList)
         getView()?.getAllTasks(taskList)
+        getView()?.showProgressBar()
     }
 
 
@@ -71,8 +70,10 @@ class TasksPresenter : BasePresenter<TasksView>() {
         tasksInteractor.getAllTasks()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { getView()?.showProgressBar() }
             .subscribeBy(
                 onSuccess = {
+                    getView()?.hideProgressBar()
                     taskList = it.toMutableList()
                     getView()?.updateTaskList(taskList)
                     Log.i("TASKS", it.toString())

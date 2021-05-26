@@ -1,6 +1,7 @@
 package com.example.todolistapp.presentation.tasks
 
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -125,6 +126,14 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
     override fun getAllTasks(tasks: List<Task>) {
         tasksAdapter.submitList(tasks)
+    }
+
+    override fun showProgressBar() {
+        loadProgressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgressBar() {
+        loadProgressBar.visibility = View.GONE
     }
 }
 

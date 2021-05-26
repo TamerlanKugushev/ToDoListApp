@@ -3,9 +3,7 @@ package com.example.todolistapp.data.repositories
 import com.example.todolistapp.AppPreferencesHelper
 import com.example.todolistapp.BaseApplication
 import com.example.todolistapp.RetrofitHolder
-import com.example.todolistapp.data.models.logout.UserLogoutResponse
 import io.reactivex.Completable
-import io.reactivex.Single
 
 object LogoutRepository {
 
