@@ -3,11 +3,10 @@ package com.example.todolistapp.domain
 import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.data.repositories.TaskRepository
-import io.reactivex.Completable
 import io.reactivex.Single
 
-class AddTaskInteractor {
-    fun addTask(description: String): Single<Task> {
-        return TaskRepository.addTask(description.trim())
+class TasksInteractor {
+    fun getAllTasks(): Single<List<Task>> {
+        return TaskRepository.getAllTasks()
     }
 }

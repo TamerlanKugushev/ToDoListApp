@@ -1,7 +1,10 @@
 package com.example.todolistapp
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity(), Router {
 
 
     override fun navigateToLoginScreen() {
+        supportFragmentManager.popBackStack()
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainer, SignInFragment.newInstance())
@@ -65,7 +70,7 @@ class MainActivity : AppCompatActivity(), Router {
     }
 
     override fun openRootSignInScreen() {
-        supportFragmentManager.popBackStack()
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         supportFragmentManager
             .beginTransaction()
@@ -73,6 +78,7 @@ class MainActivity : AppCompatActivity(), Router {
             .addToBackStack(null)
             .commit()
     }
+
 }
 
 interface Router {

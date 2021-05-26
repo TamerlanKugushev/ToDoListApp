@@ -1,9 +1,11 @@
 package com.example.todolistapp.presentation.tasks
 
 import android.util.Log
+import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.domain.DeleteUserInteractor
 import com.example.todolistapp.domain.LogoutInteractor
+import com.example.todolistapp.domain.TasksInteractor
 import com.example.todolistapp.presentation.sign_in.SignInView
 import com.example.todolistapp.utils.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,6 +17,18 @@ class TasksPresenter : BasePresenter<TasksView>() {
 
     private val logoutInteractor = LogoutInteractor()
     private val deleteInteractor = DeleteUserInteractor()
+    private val tasksInteractor = TasksInteractor()
+    private var taskList = mutableListOf<Task>()
+
+    init {
+        loadAllTasks()
+    }
+
+    override fun bindView(view: TasksView) {
+        super.bindView(view)
+        getView()?.updateTaskList(taskList)
+        getView()?.getAllTasks(taskList)
+    }
 
 
     fun logout() {
@@ -23,14 +37,13 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onSuccess = {
+                onComplete = {
                     getView()?.navigateToSignInScreen()
-                    Log.i("LOGOUT", it.toString())
                 },
                 onError = {
                     Log.e("LOGOUT", it.toString())
                 }
-            ).addTo(viewCompositeDisposable)
+            ).addTo(dataCompositeDisposable)
     }
 
     fun deleteUser() {
@@ -46,7 +59,28 @@ class TasksPresenter : BasePresenter<TasksView>() {
                 onError = {
                     Log.e("DEL", it.toString())
                 }
-            ).addTo(viewCompositeDisposable)
+            ).addTo(dataCompositeDisposable)
+    }
+
+    fun onTaskAdded(task: Task) {
+        taskList.add(task)
+        getView()?.updateTaskList(taskList)
+    }
+
+    private fun loadAllTasks() {
+        tasksInteractor.getAllTasks()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    taskList = it.toMutableList()
+                    getView()?.updateTaskList(taskList)
+                    Log.i("TASKS", it.toString())
+                },
+                onError = {
+                    Log.e("TASKS", it.toString())
+                }
+            ).addTo(dataCompositeDisposable)
     }
 
 }

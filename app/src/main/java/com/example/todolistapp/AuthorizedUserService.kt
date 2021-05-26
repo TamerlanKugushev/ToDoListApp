@@ -1,39 +1,29 @@
 package com.example.todolistapp
 
-import com.example.todolistapp.data.models.*
 import com.example.todolistapp.data.models.delete.UserDeleteResponse
 import com.example.todolistapp.data.models.logout.UserLogoutResponse
+import com.example.todolistapp.data.models.task.TaskListResponse
 import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
-import com.example.todolistapp.data.models.update.UserUpdateRequest
+import io.reactivex.Completable
 import io.reactivex.Single
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface AuthorizedUserService {
 
-    @GET("user/me")
-    fun getLoggedInUserViaToken(@Header("Authorization") token: String): Single<UserLogin>
-
     @POST("user/logout")
-    fun logoutUser(@Header("Authorization") token: String?): Single<UserLogoutResponse>
+    fun logoutUser(): Completable
 
     @DELETE("user/me")
-    fun deleteUser(@Header("Authorization") token: String?): Single<UserDeleteResponse>
-
-
-    @PUT("user/me")
-    fun updateUser(
-        @Header("Authorization") token: String,
-        @Body body: UserUpdateRequest
-    ): Single<UserUpdateResponse>
-
+    fun deleteUser(): Single<UserDeleteResponse>
 
     @POST("task")
-    fun addTask(
-        @Header("Authorization") token: String?,
-        @Body body: TaskRequest
-    ): Single<TaskResponse>
+    fun addTask(@Body body: TaskRequest): Single<TaskResponse>
 
-
+    @GET("task")
+    fun getAllTask(): Single<TaskListResponse>
 }
 
