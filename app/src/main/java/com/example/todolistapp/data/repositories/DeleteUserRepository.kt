@@ -13,7 +13,7 @@ object DeleteUserRepository {
 
     fun deleteUser(): Single<UserDeleteResponse> {
         return authorizedUserService
-            .deleteUser(prefsHelper.getToken())
+            .deleteUser()
             .doOnSuccess { prefsHelper.removeToken() }
             .map { response ->
                 response

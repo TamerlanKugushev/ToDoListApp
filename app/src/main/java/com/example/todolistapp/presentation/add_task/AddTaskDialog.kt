@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentManager
 import com.example.todolistapp.R
+import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.utils.BaseBottomSheetDialogFragment
 import com.example.todolistapp.utils.PresentersStorage
@@ -83,7 +85,7 @@ class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
         addTaskListener = null
     }
 
-    override fun addTask(task: TaskResponse) {
+    override fun addTask(task: Task) {
         addTaskListener?.onTaskAdded(task)
         dismiss()
     }
@@ -98,6 +100,6 @@ class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
 }
 
 interface AddTaskListener {
-    fun onTaskAdded(task: TaskResponse)
+    fun onTaskAdded(task: Task)
 }
 
