@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.todolistapp.R
-import com.example.todolistapp.Router
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_signin.*
@@ -22,12 +21,8 @@ class SignInFragment : BaseFragment(), SignInView {
 
     private lateinit var presenter: SignInPresenter
 
-    private var router: Router? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is Router) {
-            router = context
-        }
     }
 
     override fun onCreateView(
@@ -74,15 +69,6 @@ class SignInFragment : BaseFragment(), SignInView {
 
     override fun onDetach() {
         super.onDetach()
-        router = null
-    }
-
-    override fun navigateToRegistrationScreen() {
-        router?.navigateToRegistrationScreen()
-    }
-
-    override fun navigateToTasksScreen() {
-        router?.navigateToTasksScreen()
     }
 
     override fun showProgressBar() {

@@ -2,12 +2,11 @@ package com.example.todolistapp.presentation.tasks
 
 import android.util.Log
 import com.example.todolistapp.data.models.task.Task
-import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.domain.DeleteUserInteractor
 import com.example.todolistapp.domain.LogoutInteractor
 import com.example.todolistapp.domain.TasksInteractor
-import com.example.todolistapp.presentation.sign_in.SignInView
 import com.example.todolistapp.utils.BasePresenter
+import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -18,7 +17,8 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val logoutInteractor = LogoutInteractor()
     private val deleteInteractor = DeleteUserInteractor()
     private val tasksInteractor = TasksInteractor()
-    private var taskList = mutableListOf<Task>()
+
+    private val taskListSubject = BehaviorRelay.create<List<Task>>()
 
     init {
         loadAllTasks()
@@ -26,10 +26,36 @@ class TasksPresenter : BasePresenter<TasksView>() {
 
     override fun bindView(view: TasksView) {
         super.bindView(view)
-        getView()?.updateTaskList(taskList)
-        getView()?.getAllTasks(taskList)
+
+        subscribeTaskList()
     }
 
+    private fun loadAllTasks() {
+        tasksInteractor.getAllTasks()
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    taskListSubject.accept(it)
+                    Log.i("TASKS", it.toString())
+                },
+                onError = {
+                    Log.e("TASKS", it.toString())
+                }
+            ).addTo(dataCompositeDisposable)
+    }
+
+    private fun subscribeTaskList() {
+        taskListSubject.hide()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    getView()?.updateTaskList(it)
+                },
+                onError = {
+                    Log.e("TASKS", it.toString())
+                }
+            ).addTo(viewCompositeDisposable)
+    }
 
     fun logout() {
         logoutInteractor
@@ -63,24 +89,9 @@ class TasksPresenter : BasePresenter<TasksView>() {
     }
 
     fun onTaskAdded(task: Task) {
+        val taskList = taskListSubject.value.orEmpty().toMutableList()
         taskList.add(task)
-        getView()?.updateTaskList(taskList)
-    }
-
-    private fun loadAllTasks() {
-        tasksInteractor.getAllTasks()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onSuccess = {
-                    taskList = it.toMutableList()
-                    getView()?.updateTaskList(taskList)
-                    Log.i("TASKS", it.toString())
-                },
-                onError = {
-                    Log.e("TASKS", it.toString())
-                }
-            ).addTo(dataCompositeDisposable)
+        taskListSubject.accept(taskList)
     }
 
 }
