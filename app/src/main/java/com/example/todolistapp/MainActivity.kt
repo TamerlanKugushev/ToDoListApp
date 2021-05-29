@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.todolistapp.data.repositories.AuthorizationRepository
 import com.example.todolistapp.presentation.registration.RegistrationFragment
 import com.example.todolistapp.presentation.sign_in.SignInFragment

@@ -2,9 +2,11 @@ package com.example.todolistapp.presentation.registration
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
 import com.example.todolistapp.utils.BaseFragment
@@ -56,6 +58,7 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
         continueButton.setOnClickListener {
             register()
         }
+        errorTextView.setOnClickListener { errorTextView.visibility = View.GONE }
     }
 
     override fun onStart() {
@@ -79,20 +82,29 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     override fun showProgressBar() {
-        regProgressBar.visibility=View.VISIBLE
+        regProgressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgressBar() {
-        regProgressBar.visibility=View.INVISIBLE
+        regProgressBar.visibility = View.GONE
     }
 
-    private fun register() {
+    override fun showError() {
+        errorTextView.visibility = View.VISIBLE
+    }
+
+    private fun register() = if (emailEditText.text.toString()
+            .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
+            .matches()
+    ) {
         presenter.registerUser(
             nameEditText.text.toString(),
             passwordEditText.text.toString(),
             emailEditText.text.toString(),
             ageEditText.text.toString()
         )
+    } else {
+        Toast.makeText(requireContext(), "Invalid Email Address!", Toast.LENGTH_SHORT).show()
     }
 
 }

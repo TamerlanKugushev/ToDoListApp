@@ -6,11 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentManager
 import com.example.todolistapp.R
 import com.example.todolistapp.data.models.task.Task
-import com.example.todolistapp.data.models.task.TaskResponse
 import com.example.todolistapp.utils.BaseBottomSheetDialogFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_add.*

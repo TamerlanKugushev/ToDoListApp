@@ -1,16 +1,15 @@
 package com.example.todolistapp.presentation.tasks
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
 import com.example.todolistapp.Router
 import com.example.todolistapp.data.models.task.Task
-import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.presentation.add_task.AddTaskDialog
 import com.example.todolistapp.presentation.add_task.AddTaskListener
+import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_tasks.*
@@ -124,16 +123,24 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         router?.openRootSignInScreen()
     }
 
-    override fun getAllTasks(tasks: List<Task>) {
-        tasksAdapter.submitList(tasks)
-    }
 
-    override fun showProgressBar() {
-        loadProgressBar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgressBar() {
+    override fun updateState(tasksScreenStates: TasksScreenStates) {
+        recyclerViewTasks.visibility = View.GONE
+        addTask_btn.visibility = View.GONE
         loadProgressBar.visibility = View.GONE
+        when (tasksScreenStates) {
+            TasksScreenStates.CONTENT -> {
+                recyclerViewTasks.visibility = View.VISIBLE
+                addTask_btn.visibility = View.VISIBLE
+            }
+            TasksScreenStates.LOADING -> {
+                loadProgressBar.visibility = View.VISIBLE
+            }
+            TasksScreenStates.ERROR -> {
+            }
+            TasksScreenStates.START -> {
+            }
+        }
     }
 }
 

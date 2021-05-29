@@ -17,6 +17,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val deleteInteractor = DeleteUserInteractor()
     private val tasksInteractor = TasksInteractor()
     private var taskList = mutableListOf<Task>()
+    private var tasksScreenStates: TasksScreenStates = TasksScreenStates.START
 
     init {
         loadAllTasks()
@@ -25,8 +26,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
     override fun bindView(view: TasksView) {
         super.bindView(view)
         getView()?.updateTaskList(taskList)
-        getView()?.getAllTasks(taskList)
-        getView()?.showProgressBar()
+        getView()?.updateState(tasksScreenStates)
     }
 
 
@@ -70,11 +70,15 @@ class TasksPresenter : BasePresenter<TasksView>() {
         tasksInteractor.getAllTasks()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess { getView()?.showProgressBar() }
+            .doOnSubscribe {
+                tasksScreenStates = TasksScreenStates.LOADING
+                getView()?.updateState(tasksScreenStates)
+            }
             .subscribeBy(
                 onSuccess = {
-                    getView()?.hideProgressBar()
                     taskList = it.toMutableList()
+                    tasksScreenStates = TasksScreenStates.CONTENT
+                    getView()?.updateState(tasksScreenStates)
                     getView()?.updateTaskList(taskList)
                     Log.i("TASKS", it.toString())
                 },

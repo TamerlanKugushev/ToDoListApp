@@ -10,4 +10,6 @@ interface RegistrationView : BaseView {
 
     fun hideProgressBar()
 
+    fun showError()
+
 }

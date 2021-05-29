@@ -22,7 +22,7 @@ class RegistrationPresenter : BasePresenter<RegistrationView>() {
             .registerUser(name, password, email, age)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { getView()?.showProgressBar() }
+            .doOnSuccess { getView()?.showProgressBar() }
             .subscribeBy(
                 onSuccess = {
                     getView()?.hideProgressBar()
@@ -30,6 +30,7 @@ class RegistrationPresenter : BasePresenter<RegistrationView>() {
                     Log.i("REG", it.toString())
                 }, onError = {
                     getView()?.hideProgressBar()
+                    getView()?.showError()
                     Log.e("REG", it.toString())
                 }
             ).addTo(viewCompositeDisposable)
