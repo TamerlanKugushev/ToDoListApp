@@ -6,6 +6,7 @@ import com.example.todolistapp.domain.DeleteUserInteractor
 import com.example.todolistapp.domain.LogoutInteractor
 import com.example.todolistapp.domain.TasksInteractor
 import com.example.todolistapp.utils.BasePresenter
+import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -18,6 +19,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val tasksInteractor = TasksInteractor()
     private var taskList = mutableListOf<Task>()
     private var tasksScreenStates: TasksScreenStates = TasksScreenStates.START
+    private val taskListSubject = BehaviorRelay.create<List<Task>>()
 
     init {
         loadAllTasks()
@@ -25,8 +27,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
 
     override fun bindView(view: TasksView) {
         super.bindView(view)
-        getView()?.updateTaskList(taskList)
-        getView()?.updateState(tasksScreenStates)
+        subscribeTaskList()
     }
 
 
@@ -62,30 +63,36 @@ class TasksPresenter : BasePresenter<TasksView>() {
     }
 
     fun onTaskAdded(task: Task) {
+        val taskList = taskListSubject.value.orEmpty().toMutableList()
         taskList.add(task)
-        getView()?.updateTaskList(taskList)
+        taskListSubject.accept(taskList)
     }
 
     private fun loadAllTasks() {
         tasksInteractor.getAllTasks()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                tasksScreenStates = TasksScreenStates.LOADING
-                getView()?.updateState(tasksScreenStates)
-            }
             .subscribeBy(
                 onSuccess = {
-                    taskList = it.toMutableList()
-                    tasksScreenStates = TasksScreenStates.CONTENT
-                    getView()?.updateState(tasksScreenStates)
-                    getView()?.updateTaskList(taskList)
+                    taskListSubject.accept(it)
                     Log.i("TASKS", it.toString())
                 },
                 onError = {
                     Log.e("TASKS", it.toString())
                 }
             ).addTo(dataCompositeDisposable)
+    }
+
+    private fun subscribeTaskList() {
+        taskListSubject.hide()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    getView()?.updateTaskList(it)
+                },
+                onError = {
+                    Log.e("TASKS", it.toString())
+                }
+            ).addTo(viewCompositeDisposable)
     }
 
 }

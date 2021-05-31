@@ -9,9 +9,12 @@ import com.example.todolistapp.presentation.registration.RegistrationFragment
 import com.example.todolistapp.presentation.sign_in.SignInFragment
 import com.example.todolistapp.presentation.tasks.TasksFragment
 import com.example.todolistapp.presentation.welcome.WelcomeFragment
+import com.github.terrakok.cicerone.androidx.AppNavigator
 
-class MainActivity : AppCompatActivity(), Router {
+class MainActivity : AppCompatActivity() {
 
+    private val navigator = AppNavigator(this, R.id.fragmentContainer)
+    private val navigatorHolder = BaseApplication.instance.navigatorHolder
 
     @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,50 +37,17 @@ class MainActivity : AppCompatActivity(), Router {
 
     }
 
+    override fun onResumeFragments() {
+        super.onResumeFragments()
 
-    override fun navigateToLoginScreen() {
-        supportFragmentManager.popBackStack()
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainer, SignInFragment.newInstance())
-            .addToBackStack(null)
-            .commit()
+        navigatorHolder.setNavigator(navigator)
     }
 
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
 
-    override fun navigateToRegistrationScreen() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainer, RegistrationFragment.newInstance())
-            .addToBackStack(null)
-            .commit()
-    }
-
-
-    override fun navigateToTasksScreen() {
-        supportFragmentManager.popBackStack()
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainer, TasksFragment.newInstance())
-            .commit()
-    }
-
-    override fun openRootSignInScreen() {
-        supportFragmentManager.popBackStack()
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragmentContainer, SignInFragment.newInstance())
-            .commit()
+        super.onPause()
     }
 
 }
 
-interface Router {
-    fun navigateToLoginScreen()
-    fun navigateToRegistrationScreen()
-    fun navigateToTasksScreen()
-    fun openRootSignInScreen()
-}

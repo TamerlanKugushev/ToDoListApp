@@ -24,7 +24,7 @@ class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
             dialog.show(fragmentManager, TAG)
         }
 
-        private fun newInstance(): AddTaskDialog {
+        fun newInstance(): AddTaskDialog {
             return AddTaskDialog()
         }
     }

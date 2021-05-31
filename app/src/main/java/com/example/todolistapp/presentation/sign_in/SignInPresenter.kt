@@ -1,8 +1,11 @@
 package com.example.todolistapp.presentation.sign_in
 
 import android.util.Log
+import com.example.todolistapp.BaseApplication
+import com.example.todolistapp.Screens
 import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.utils.BasePresenter
+import com.github.terrakok.cicerone.Router
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -11,14 +14,17 @@ import io.reactivex.schedulers.Schedulers
 class SignInPresenter : BasePresenter<SignInView>() {
 
     private val authorizationInteractor = AuthorizationInteractor()
+    private val router: Router = BaseApplication.instance.router
 
     fun login(email: String, password: String) {
         authorizationInteractor.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { getView()?.showProgressBar() }
             .subscribeBy(
                 onSuccess = {
-                    getView()?.navigateToTasksScreen()
+                    getView()?.hideProgressBar()
+                    router.navigateTo(Screens.TasksScreen())
                     Log.i("LOGIN", it.toString())
                 },
                 onError = {
@@ -28,6 +34,6 @@ class SignInPresenter : BasePresenter<SignInView>() {
     }
 
     fun onRegisterButtonClicked() {
-        getView()?.navigateToRegistrationScreen()
+        router.navigateTo(Screens.RegistrationScreen())
     }
 }

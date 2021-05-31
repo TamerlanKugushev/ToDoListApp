@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.todolistapp.R
-import com.example.todolistapp.Router
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_registration.*
@@ -23,7 +22,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     private lateinit var presenter: RegistrationPresenter
-    private var router: Router? = null
 
 
     override fun attachPresenter() {
@@ -41,9 +39,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is Router) {
-            router = context
-        }
     }
 
     override fun onCreateView(
@@ -74,11 +69,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
 
     override fun onDetach() {
         super.onDetach()
-        router = null
-    }
-
-    override fun navigateToTasksScreen() {
-        router?.navigateToTasksScreen()
     }
 
     override fun showProgressBar() {
