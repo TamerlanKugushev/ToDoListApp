@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
-import com.example.todolistapp.Router
 import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.presentation.add_task.AddTaskDialog
 import com.example.todolistapp.presentation.add_task.AddTaskListener
@@ -23,15 +22,11 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         }
     }
 
-    private var router: Router? = null
     private lateinit var tasksAdapter: TasksAdapter
     private lateinit var presenter: TasksPresenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is Router) {
-            router = context
-        }
     }
 
     override fun onCreateView(
@@ -82,7 +77,6 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
     override fun onDetach() {
         super.onDetach()
-        router = null
         presenter.unbindView()
     }
 
@@ -119,9 +113,7 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         tasksAdapter.submitList(listCopy)
     }
 
-    override fun navigateToSignInScreen() {
-        router?.openRootSignInScreen()
-    }
+
 
 
     override fun updateState(tasksScreenStates: TasksScreenStates) {

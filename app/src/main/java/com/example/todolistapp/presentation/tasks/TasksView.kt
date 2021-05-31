@@ -5,8 +5,6 @@ import com.example.todolistapp.utils.BaseView
 
 interface TasksView : BaseView {
 
-    fun navigateToSignInScreen()
-
     fun updateTaskList(tasks: List<Task>)
 
     fun updateState(tasksScreenStates: TasksScreenStates)

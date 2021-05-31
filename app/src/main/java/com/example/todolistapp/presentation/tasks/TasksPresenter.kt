@@ -1,11 +1,14 @@
 package com.example.todolistapp.presentation.tasks
 
 import android.util.Log
+import com.example.todolistapp.BaseApplication
+import com.example.todolistapp.Screens
 import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.domain.DeleteUserInteractor
 import com.example.todolistapp.domain.LogoutInteractor
 import com.example.todolistapp.domain.TasksInteractor
 import com.example.todolistapp.utils.BasePresenter
+import com.github.terrakok.cicerone.Router
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -17,9 +20,9 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val logoutInteractor = LogoutInteractor()
     private val deleteInteractor = DeleteUserInteractor()
     private val tasksInteractor = TasksInteractor()
-    private var taskList = mutableListOf<Task>()
     private var tasksScreenStates: TasksScreenStates = TasksScreenStates.START
     private val taskListSubject = BehaviorRelay.create<List<Task>>()
+    private val router: Router = BaseApplication.instance.router
 
     init {
         loadAllTasks()
@@ -38,7 +41,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
-                    getView()?.navigateToSignInScreen()
+                    router.navigateTo(Screens.SignInScreen())
                 },
                 onError = {
                     Log.e("LOGOUT", it.toString())
@@ -53,7 +56,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    getView()?.navigateToSignInScreen()
+                    router.navigateTo(Screens.SignInScreen())
                     Log.i("DEL", it.toString())
                 },
                 onError = {
