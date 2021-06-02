@@ -6,7 +6,8 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isEmpty
+import androidx.core.widget.doOnTextChanged
 import com.example.todolistapp.R
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
@@ -22,7 +23,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     private lateinit var presenter: RegistrationPresenter
-
 
     override fun attachPresenter() {
         val presenter = PresentersStorage.getPresenter(viewId)
@@ -53,7 +53,16 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
         continueButton.setOnClickListener {
             register()
         }
-        errorTextView.setOnClickListener { errorTextView.visibility = View.GONE }
+
+        passwordEditText.doOnTextChanged { text, start, before, count ->
+            if (text!!.length < 6) {
+                textInputLayoutPasswordRegistration.error =
+                    "Пароль должен содержать не менее 7 символов"
+            } else if (text.length > 6) {
+                textInputLayoutPasswordRegistration.error =
+                    null
+            }
+        }
     }
 
     override fun onStart() {
@@ -80,21 +89,62 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     override fun showError() {
-        errorTextView.visibility = View.VISIBLE
+        textInputLayoutEmailAddress.error ="Пользователь уже зарегистрирован"
     }
 
-    private fun register() = if (emailEditText.text.toString()
-            .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
-            .matches()
-    ) {
-        presenter.registerUser(
-            nameEditText.text.toString(),
-            passwordEditText.text.toString(),
-            emailEditText.text.toString(),
-            ageEditText.text.toString()
-        )
-    } else {
-        Toast.makeText(requireContext(), "Invalid Email Address!", Toast.LENGTH_SHORT).show()
+    private fun register() {
+        if (validateUserName() && validateUserAge() && validateEmail() && validatePassword())
+            presenter.registerUser(
+                nameEditText.text.toString(),
+                passwordEditText.text.toString(),
+                emailEditText.text.toString(),
+                ageEditText.text.toString()
+            )
+    }
+
+    private fun validateUserName(): Boolean {
+        return if (nameEditText.text.toString().isEmpty()) {
+            textInputLayoutName.error = "Поле не может быть пустым"
+            false
+        } else {
+            textInputLayoutName.error = null
+            true
+        }
+    }
+
+    private fun validateUserAge(): Boolean {
+        return if (ageEditText.text.toString().isEmpty()) {
+            textInputLayoutAge.error = "Поле не может быть пустым"
+            false
+        } else {
+            textInputLayoutName.error = null
+            true
+        }
+    }
+
+    private fun validateEmail(): Boolean {
+        return if (emailEditText.text.toString().isEmpty()) {
+            textInputLayoutEmailAddress.error = "Поле не может быть пустым"
+            false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
+                .matches()
+        ) {
+            textInputLayoutEmailAddress.error = "Ваша электронная почта недействительна"
+            false
+        } else {
+            textInputLayoutName.error = null
+            true
+        }
+    }
+
+    private fun validatePassword(): Boolean {
+        return if (passwordEditText.text.toString().isEmpty()) {
+            textInputLayoutPasswordRegistration.error = "Поле не может быть пустым"
+            false
+        } else {
+            textInputLayoutName.error = null
+            true
+        }
     }
 
 }

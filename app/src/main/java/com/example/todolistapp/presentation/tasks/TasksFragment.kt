@@ -113,20 +113,21 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         tasksAdapter.submitList(listCopy)
     }
 
-
-
-
     override fun updateState(tasksScreenStates: TasksScreenStates) {
-        recyclerViewTasks.visibility = View.GONE
+        /*recyclerViewTasks.visibility = View.GONE
         addTask_btn.visibility = View.GONE
-        loadProgressBar.visibility = View.GONE
+        loadProgressBar.visibility = View.GONE*/
         when (tasksScreenStates) {
             TasksScreenStates.CONTENT -> {
                 recyclerViewTasks.visibility = View.VISIBLE
                 addTask_btn.visibility = View.VISIBLE
+                loadProgressBar.visibility = View.GONE
+
             }
             TasksScreenStates.LOADING -> {
                 loadProgressBar.visibility = View.VISIBLE
+                recyclerViewTasks.visibility = View.GONE
+                addTask_btn.visibility = View.GONE
             }
             TasksScreenStates.ERROR -> {
             }

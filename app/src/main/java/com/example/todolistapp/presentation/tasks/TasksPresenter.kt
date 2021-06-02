@@ -76,6 +76,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
+
                     taskListSubject.accept(it)
                     Log.i("TASKS", it.toString())
                 },
@@ -88,8 +89,14 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private fun subscribeTaskList() {
         taskListSubject.hide()
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                tasksScreenStates = TasksScreenStates.LOADING
+                getView()?.updateState(tasksScreenStates)
+            }
             .subscribeBy(
                 onNext = {
+                    tasksScreenStates = TasksScreenStates.CONTENT
+                    getView()?.updateState(tasksScreenStates)
                     getView()?.updateTaskList(it)
                 },
                 onError = {

@@ -3,8 +3,5 @@ package com.example.todolistapp.presentation.sign_in
 import com.example.todolistapp.utils.BaseView
 
 interface SignInView : BaseView {
-
-    fun showProgressBar()
-
-    fun hideProgressBar()
+    fun showError()
 }

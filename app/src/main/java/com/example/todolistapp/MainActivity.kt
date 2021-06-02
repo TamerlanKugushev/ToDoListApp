@@ -5,8 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.todolistapp.data.repositories.AuthorizationRepository
-import com.example.todolistapp.presentation.registration.RegistrationFragment
-import com.example.todolistapp.presentation.sign_in.SignInFragment
 import com.example.todolistapp.presentation.tasks.TasksFragment
 import com.example.todolistapp.presentation.welcome.WelcomeFragment
 import com.github.terrakok.cicerone.androidx.AppNavigator
