@@ -8,7 +8,6 @@
     tools:context=".presentation.add_task.AddTaskDialog"
     tools:ignore="OnClick">
 
-
 <View
     android:id="@+id/view"
     android:layout_width="70dp"
@@ -18,9 +17,7 @@
     android:background="#A9A9A9"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    />
-
+    app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textViewNewTask"

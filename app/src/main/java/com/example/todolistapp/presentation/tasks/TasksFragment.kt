@@ -11,7 +11,6 @@ import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_tasks.*
-import kotlinx.android.synthetic.main.fragment_tasks.view.*
 
 class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
@@ -27,7 +26,7 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tasks, container, false)
     }
@@ -54,10 +53,9 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         }
 
         tasksAdapter = TasksAdapter()
-        val recyclerView = view.recyclerViewTasks
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = tasksAdapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        tasksRecyclerView.setHasFixedSize(true)
+        tasksRecyclerView.adapter = tasksAdapter
+        tasksRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         addTaskButton.setOnClickListener {
             AddTaskDialog.show(childFragmentManager)
@@ -107,12 +105,12 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
     }
 
     override fun updateState(tasksScreenStates: TasksScreenStates) {
-        recyclerViewTasks.visibility = View.GONE
+        tasksRecyclerView.visibility = View.GONE
         addTaskButton.visibility = View.GONE
         loadProgressBar.visibility = View.GONE
         when (tasksScreenStates) {
             TasksScreenStates.CONTENT -> {
-                recyclerViewTasks.visibility = View.VISIBLE
+                tasksRecyclerView.visibility = View.VISIBLE
                 addTaskButton.visibility = View.VISIBLE
             }
             TasksScreenStates.LOADING -> {
