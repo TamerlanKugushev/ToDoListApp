@@ -83,18 +83,21 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
         errorTextView.visibility = View.VISIBLE
     }
 
-    private fun register() = if (emailEditText.text.toString()
-            .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
-            .matches()
-    ) {
-        presenter.registerUser(
-            nameEditText.text.toString(),
-            passwordEditText.text.toString(),
-            emailEditText.text.toString(),
-            ageEditText.text.toString()
-        )
-    } else {
-        Toast.makeText(requireContext(), "Invalid Email Address!", Toast.LENGTH_SHORT).show()
+
+    private fun register() {
+        if (emailEditText.text.toString()
+                .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
+                .matches()
+        ) {
+            presenter.registerUser(
+                nameEditText.text.toString(),
+                passwordEditText.text.toString(),
+                emailEditText.text.toString(),
+                ageEditText.text.toString()
+            )
+        } else {
+            Toast.makeText(requireContext(), "Invalid Email Address!", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
