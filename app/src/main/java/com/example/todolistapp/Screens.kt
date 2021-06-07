@@ -10,8 +10,10 @@ import com.github.terrakok.cicerone.androidx.FragmentScreen
 object Screens {
 
     fun WelcomeScreen() = FragmentScreen { WelcomeFragment.newInstance() }
+
     fun RegistrationScreen() = FragmentScreen { RegistrationFragment.newInstance() }
+
     fun SignInScreen() = FragmentScreen { SignInFragment.newInstance() }
+
     fun TasksScreen() = FragmentScreen { TasksFragment.newInstance() }
-    fun AddTaskScreen() = FragmentScreen { AddTaskDialog.newInstance() }
 }

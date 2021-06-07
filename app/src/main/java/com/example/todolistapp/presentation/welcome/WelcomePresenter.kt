@@ -9,10 +9,6 @@ class WelcomePresenter : BasePresenter<WelcomeView>() {
 
     private val router: Router = BaseApplication.instance.router
 
-    override fun bindView(view: WelcomeView) {
-        super.bindView(view)
-    }
-
     fun navigateToSignInScreen() {
         router.navigateTo(Screens.SignInScreen())
     }

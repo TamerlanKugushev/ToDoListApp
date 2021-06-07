@@ -20,7 +20,6 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val logoutInteractor = LogoutInteractor()
     private val deleteInteractor = DeleteUserInteractor()
     private val tasksInteractor = TasksInteractor()
-    private var tasksScreenStates: TasksScreenStates = TasksScreenStates.START
     private val taskListSubject = BehaviorRelay.create<List<Task>>()
     private val router: Router = BaseApplication.instance.router
 
@@ -32,7 +31,6 @@ class TasksPresenter : BasePresenter<TasksView>() {
         super.bindView(view)
         subscribeTaskList()
     }
-
 
     fun logout() {
         logoutInteractor
