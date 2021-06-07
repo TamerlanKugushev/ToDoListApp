@@ -39,7 +39,7 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragment_registration, container, false)
     }
 
