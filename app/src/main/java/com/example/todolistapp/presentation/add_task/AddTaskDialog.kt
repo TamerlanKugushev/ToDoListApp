@@ -24,7 +24,7 @@ class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
             dialog.show(fragmentManager, TAG)
         }
 
-        fun newInstance(): AddTaskDialog {
+        private fun newInstance(): AddTaskDialog {
             return AddTaskDialog()
         }
     }
@@ -63,7 +63,7 @@ class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        add_btn.setOnClickListener {
+        addButton.setOnClickListener {
             addTask()
         }
     }
@@ -87,7 +87,6 @@ class AddTaskDialog : BaseBottomSheetDialogFragment(), AddTaskView {
         addTaskListener?.onTaskAdded(task)
         dismiss()
     }
-
 
     @SuppressLint("CheckResult")
     private fun addTask() {

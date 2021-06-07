@@ -1,6 +1,5 @@
 package com.example.todolistapp.presentation.sign_in
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +42,11 @@ class SignInFragment : BaseFragment(), SignInView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Переход на экран регистрации
-        register_btn.setOnClickListener {
+        registerButton.setOnClickListener {
             onRegisterButtonClicked()
         }
         //Переход на экран задач
-        signIn_btn.setOnClickListener {
+        signInButton.setOnClickListener {
             login()
         }
     }

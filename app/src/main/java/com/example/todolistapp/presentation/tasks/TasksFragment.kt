@@ -1,6 +1,5 @@
 package com.example.todolistapp.presentation.tasks
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,7 +59,7 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         recyclerView.adapter = tasksAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        addTask_btn.setOnClickListener {
+        addTaskButton.setOnClickListener {
             AddTaskDialog.show(childFragmentManager)
         }
     }
@@ -109,12 +108,12 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
     override fun updateState(tasksScreenStates: TasksScreenStates) {
         recyclerViewTasks.visibility = View.GONE
-        addTask_btn.visibility = View.GONE
+        addTaskButton.visibility = View.GONE
         loadProgressBar.visibility = View.GONE
         when (tasksScreenStates) {
             TasksScreenStates.CONTENT -> {
                 recyclerViewTasks.visibility = View.VISIBLE
-                addTask_btn.visibility = View.VISIBLE
+                addTaskButton.visibility = View.VISIBLE
             }
             TasksScreenStates.LOADING -> {
                 loadProgressBar.visibility = View.VISIBLE
