@@ -25,10 +25,6 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
     private lateinit var tasksAdapter: TasksAdapter
     private lateinit var presenter: TasksPresenter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,9 +70,8 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         presenter.bindView(this)
     }
 
-
-    override fun onDetach() {
-        super.onDetach()
+    override fun onStop() {
+        super.onStop()
         presenter.unbindView()
     }
 
@@ -101,7 +96,6 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
                 super.onOptionsItemSelected(item)
             }
         }
-
     }
 
     override fun onTaskAdded(task: Task) {
@@ -112,9 +106,6 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         val listCopy = tasks.toMutableList().map { it.copy() }
         tasksAdapter.submitList(listCopy)
     }
-
-
-
 
     override fun updateState(tasksScreenStates: TasksScreenStates) {
         recyclerViewTasks.visibility = View.GONE

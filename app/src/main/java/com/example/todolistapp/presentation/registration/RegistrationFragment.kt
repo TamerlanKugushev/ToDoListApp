@@ -23,7 +23,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
 
     private lateinit var presenter: RegistrationPresenter
 
-
     override fun attachPresenter() {
         val presenter = PresentersStorage.getPresenter(viewId)
         if (presenter !is RegistrationPresenter) {
@@ -35,10 +34,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
 
     override fun getPresenter(): RegistrationPresenter {
         return presenter
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -64,11 +59,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     override fun onStop() {
         super.onStop()
         presenter.unbindView()
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
     }
 
     override fun showProgressBar() {
@@ -82,7 +72,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     override fun showError() {
         errorTextView.visibility = View.VISIBLE
     }
-
 
     private fun register() {
         if (emailEditText.text.toString()

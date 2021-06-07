@@ -20,10 +20,6 @@ class SignInFragment : BaseFragment(), SignInView {
 
     private lateinit var presenter: SignInPresenter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,10 +60,6 @@ class SignInFragment : BaseFragment(), SignInView {
     override fun onStop() {
         super.onStop()
         presenter.unbindView()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
     }
 
     override fun showProgressBar() {

@@ -43,15 +43,6 @@ class WelcomeFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         email_btn.setOnClickListener {
