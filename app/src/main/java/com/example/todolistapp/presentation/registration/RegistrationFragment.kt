@@ -2,11 +2,12 @@ package com.example.todolistapp.presentation.registration
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.todolistapp.R
-import com.example.todolistapp.Router
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_registration.*
@@ -21,8 +22,6 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     private lateinit var presenter: RegistrationPresenter
-    private var router: Router? = null
-
 
     override fun attachPresenter() {
         val presenter = PresentersStorage.getPresenter(viewId)
@@ -37,17 +36,10 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
         return presenter
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Router) {
-            router = context
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragment_registration, container, false)
     }
 
@@ -56,6 +48,7 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
         continueButton.setOnClickListener {
             register()
         }
+        errorTextView.setOnClickListener { errorTextView.visibility = View.GONE }
     }
 
     override fun onStart() {
@@ -66,33 +59,34 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     override fun onStop() {
         super.onStop()
         presenter.unbindView()
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        router = null
-    }
-
-    override fun navigateToTasksScreen() {
-        router?.navigateToTasksScreen()
     }
 
     override fun showProgressBar() {
-        regProgressBar.visibility=View.VISIBLE
+        regProgressBar.visibility = View.VISIBLE
     }
 
     override fun hideProgressBar() {
-        regProgressBar.visibility=View.INVISIBLE
+        regProgressBar.visibility = View.GONE
+    }
+
+    override fun showError() {
+        errorTextView.visibility = View.VISIBLE
     }
 
     private fun register() {
-        presenter.registerUser(
-            nameEditText.text.toString(),
-            passwordEditText.text.toString(),
-            emailEditText.text.toString(),
-            ageEditText.text.toString()
-        )
+        if (emailEditText.text.toString()
+                .isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
+                .matches()
+        ) {
+            presenter.registerUser(
+                nameEditText.text.toString(),
+                passwordEditText.text.toString(),
+                emailEditText.text.toString(),
+                ageEditText.text.toString()
+            )
+        } else {
+            Toast.makeText(requireContext(), "Invalid Email Address!", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

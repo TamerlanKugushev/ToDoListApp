@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistapp.R
 import com.example.todolistapp.data.models.task.Task
-import com.example.todolistapp.data.models.task.TaskResponse
 import kotlinx.android.synthetic.main.item_task.view.*
 
 class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(TasksDiffUtilCallback()) {

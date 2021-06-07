@@ -1,19 +1,16 @@
 package com.example.todolistapp.presentation.tasks
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
-import com.example.todolistapp.Router
 import com.example.todolistapp.data.models.task.Task
-import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.presentation.add_task.AddTaskDialog
 import com.example.todolistapp.presentation.add_task.AddTaskListener
+import com.example.todolistapp.presentation.tasks.adapters.TasksAdapter
 import com.example.todolistapp.utils.BaseFragment
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_tasks.*
-import kotlinx.android.synthetic.main.fragment_tasks.view.*
 
 class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
@@ -23,21 +20,13 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         }
     }
 
-    private var router: Router? = null
     private lateinit var tasksAdapter: TasksAdapter
     private lateinit var presenter: TasksPresenter
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is Router) {
-            router = context
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tasks, container, false)
     }
@@ -64,12 +53,11 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         }
 
         tasksAdapter = TasksAdapter()
-        val recyclerView = view.recyclerViewTasks
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = tasksAdapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        tasksRecyclerView.setHasFixedSize(true)
+        tasksRecyclerView.adapter = tasksAdapter
+        tasksRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        addTask_btn.setOnClickListener {
+        addTaskButton.setOnClickListener {
             AddTaskDialog.show(childFragmentManager)
         }
     }
@@ -79,10 +67,8 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         presenter.bindView(this)
     }
 
-
-    override fun onDetach() {
-        super.onDetach()
-        router = null
+    override fun onStop() {
+        super.onStop()
         presenter.unbindView()
     }
 
@@ -107,7 +93,6 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
                 super.onOptionsItemSelected(item)
             }
         }
-
     }
 
     override fun onTaskAdded(task: Task) {
@@ -119,12 +104,23 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         tasksAdapter.submitList(listCopy)
     }
 
-    override fun navigateToSignInScreen() {
-        router?.openRootSignInScreen()
-    }
-
-    override fun getAllTasks(tasks: List<Task>) {
-        tasksAdapter.submitList(tasks)
+    override fun updateState(tasksScreenStates: TasksScreenStates) {
+        tasksRecyclerView.visibility = View.GONE
+        addTaskButton.visibility = View.GONE
+        loadProgressBar.visibility = View.GONE
+        when (tasksScreenStates) {
+            TasksScreenStates.CONTENT -> {
+                tasksRecyclerView.visibility = View.VISIBLE
+                addTaskButton.visibility = View.VISIBLE
+            }
+            TasksScreenStates.LOADING -> {
+                loadProgressBar.visibility = View.VISIBLE
+            }
+            TasksScreenStates.ERROR -> {
+            }
+            TasksScreenStates.START -> {
+            }
+        }
     }
 }
 

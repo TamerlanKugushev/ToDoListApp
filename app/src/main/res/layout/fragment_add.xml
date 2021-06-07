@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".presentation.add_task.AddTaskDialog"
     tools:ignore="OnClick">
-
 
 <View
     android:id="@+id/view"
@@ -17,9 +17,7 @@
     android:background="#A9A9A9"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    />
-
+    app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textViewNewTask"
@@ -51,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewNewTask" />
 
     <Button
-        android:id="@+id/add_btn"
+        android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
