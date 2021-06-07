@@ -1,14 +1,11 @@
 package com.example.todolistapp.presentation.welcome
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.todolistapp.R
 import com.example.todolistapp.utils.BaseFragment
-import com.example.todolistapp.utils.BasePresenter
-import com.example.todolistapp.utils.BaseView
 import com.example.todolistapp.utils.PresentersStorage
 import kotlinx.android.synthetic.main.fragment_welcome.*
 
@@ -45,7 +42,7 @@ class WelcomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        email_btn.setOnClickListener {
+        emailButton.setOnClickListener {
             presenter.navigateToSignInScreen()
         }
     }
