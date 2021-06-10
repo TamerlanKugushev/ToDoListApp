@@ -66,7 +66,7 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun showError() {
-        textInputLayoutEmail.error="Пользователь незарегистрирован"
+        textInputLayoutEmail.error = "Пользователь незарегистрирован"
     }
 
     private fun onRegisterButtonClicked() {

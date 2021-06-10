@@ -116,7 +116,7 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
             }
             TasksScreenStates.LOADING -> {
                 loadProgressBar.visibility = View.VISIBLE
-                tasksRecyclerViewrecyclerViewTasks.visibility = View.GONE
+                tasksRecyclerView.visibility = View.GONE
                 addTaskButton.visibility = View.GONE
             }
             TasksScreenStates.ERROR -> {

@@ -21,7 +21,8 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val deleteInteractor = DeleteUserInteractor()
     private val tasksInteractor = TasksInteractor()
     private val taskListSubject = BehaviorRelay.create<List<Task>>()
-    private val router: Router = BaseApplication.instance.router
+    private val router = BaseApplication.instance.router
+    private var tasksScreenStates = TasksScreenStates.START
 
     init {
         loadAllTasks()
@@ -74,7 +75,6 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
-
                     taskListSubject.accept(it)
                     Log.i("TASKS", it.toString())
                 },

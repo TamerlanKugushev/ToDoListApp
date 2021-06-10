@@ -30,7 +30,7 @@ class RegistrationPresenter : BasePresenter<RegistrationView>() {
             .subscribeBy(
                 onSuccess = {
                     getView()?.hideProgressBar()
-                    router.navigateTo(Screens.TasksScreen())
+                    router.newRootScreen(Screens.TasksScreen())
                     Log.i("REG", it.toString())
                 }, onError = {
                     getView()?.hideProgressBar()

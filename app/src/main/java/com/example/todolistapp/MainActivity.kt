@@ -23,9 +23,9 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             if (AuthorizationRepository.isUserAuthorized()) {
-                router.navigateTo(Screens.TasksScreen())
+                router.newRootScreen(Screens.TasksScreen())
             } else {
-                router.navigateTo(Screens.WelcomeScreen())
+                router.newRootScreen(Screens.WelcomeScreen())
             }
         }
     }

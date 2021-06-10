@@ -49,12 +49,14 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
         }
 
         passwordEditText.doOnTextChanged { text, start, before, count ->
-            if (text!!.length < 6) {
-                textInputLayoutPasswordRegistration.error =
-                    "Пароль должен содержать не менее 7 символов"
-            } else if (text.length > 6) {
-                textInputLayoutPasswordRegistration.error =
-                    null
+            if (text != null) {
+                if (text.length < 7) {
+                    textInputLayoutPasswordRegistration.error =
+                        "Пароль должен содержать не менее 7 символов"
+                } else {
+                    textInputLayoutPasswordRegistration.error =
+                        null
+                }
             }
         }
     }
@@ -78,7 +80,7 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     override fun showError() {
-        textInputLayoutEmailAddress.error ="Пользователь уже зарегистрирован"
+        textInputLayoutEmailAddress.error = "Пользователь уже зарегистрирован"
     }
 
     private fun register() {
@@ -92,48 +94,66 @@ class RegistrationFragment : BaseFragment(), RegistrationView {
     }
 
     private fun validateUserName(): Boolean {
-        return if (nameEditText.text.toString().isEmpty()) {
+        if (nameIsEmpty()) {
             textInputLayoutName.error = "Поле не может быть пустым"
-            false
+            return false
         } else {
             textInputLayoutName.error = null
-            true
+            return true
         }
+    }
+
+    private fun nameIsEmpty(): Boolean {
+        return nameEditText.text.toString().isEmpty()
     }
 
     private fun validateUserAge(): Boolean {
-        return if (ageEditText.text.toString().isEmpty()) {
+        if (ageIsEmpty()) {
             textInputLayoutAge.error = "Поле не может быть пустым"
-            false
+            return false
         } else {
             textInputLayoutName.error = null
-            true
+            return true
         }
+    }
+
+    private fun ageIsEmpty(): Boolean {
+        return ageEditText.text.toString().isEmpty()
     }
 
     private fun validateEmail(): Boolean {
-        return if (emailEditText.text.toString().isEmpty()) {
+        if (emailIsEmpty()) {
             textInputLayoutEmailAddress.error = "Поле не может быть пустым"
-            false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString())
-                .matches()
-        ) {
-            textInputLayoutEmailAddress.error = "Ваша электронная почта недействительна"
-            false
+            return false
+        } else if (emailIsCorrect()) {
+            textInputLayoutEmailAddress.error = "Некорректный Email"
+            return false
         } else {
             textInputLayoutName.error = null
-            true
+            return true
         }
     }
 
+    private fun emailIsEmpty(): Boolean {
+        return emailEditText.text.toString().isEmpty()
+    }
+
+    private fun emailIsCorrect(): Boolean {
+        return !Patterns.EMAIL_ADDRESS.matcher(emailEditText.text.toString()).matches()
+    }
+
     private fun validatePassword(): Boolean {
-        return if (passwordEditText.text.toString().isEmpty()) {
+        if (passwordIsEmpty()) {
             textInputLayoutPasswordRegistration.error = "Поле не может быть пустым"
-            false
+            return false
         } else {
             textInputLayoutName.error = null
-            true
+            return true
         }
+    }
+
+    private fun passwordIsEmpty(): Boolean {
+        return passwordEditText.text.toString().isEmpty()
     }
 
 }
