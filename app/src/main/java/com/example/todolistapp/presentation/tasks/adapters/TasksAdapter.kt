@@ -28,7 +28,6 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(TasksDiffUti
         }
     }
 
-
     class TasksDiffUtilCallback : DiffUtil.ItemCallback<Task>() {
 
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
