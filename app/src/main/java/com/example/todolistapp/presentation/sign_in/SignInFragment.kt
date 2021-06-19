@@ -61,12 +61,12 @@ class SignInFragment : BaseFragment(), SignInView {
         presenter.unbindView()
     }
 
-    override fun showProgressBar() {
-        signinProgressBar.visibility = View.VISIBLE
+    override fun onDetach() {
+        super.onDetach()
     }
 
-    override fun hideProgressBar() {
-        signinProgressBar.visibility = View.GONE
+    override fun showError() {
+        textInputLayoutEmail.error = "Пользователь незарегистрирован"
     }
 
     private fun onRegisterButtonClicked() {
@@ -75,8 +75,8 @@ class SignInFragment : BaseFragment(), SignInView {
 
     private fun login() {
         presenter.login(
-            email = editTextEmailRegistration.text.toString(),
-            password = editTextPasswordRegistration.text.toString()
+            email = editTextEmail.text.toString(),
+            password = editTextPassword.text.toString()
         )
     }
 

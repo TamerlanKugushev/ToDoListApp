@@ -20,14 +20,13 @@ class SignInPresenter : BasePresenter<SignInView>() {
         authorizationInteractor.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess { getView()?.showProgressBar() }
             .subscribeBy(
                 onSuccess = {
-                    getView()?.hideProgressBar()
-                    router.navigateTo(Screens.TasksScreen())
+                    router.newRootScreen(Screens.TasksScreen())
                     Log.i("LOGIN", it.toString())
                 },
                 onError = {
+                    getView()?.showError()
                     Log.e("LOGIN", it.toString())
                 }
             ).addTo(viewCompositeDisposable)

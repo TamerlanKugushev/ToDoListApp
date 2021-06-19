@@ -21,7 +21,8 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private val deleteInteractor = DeleteUserInteractor()
     private val tasksInteractor = TasksInteractor()
     private val taskListSubject = BehaviorRelay.create<List<Task>>()
-    private val router: Router = BaseApplication.instance.router
+    private val router = BaseApplication.instance.router
+    private var tasksScreenStates = TasksScreenStates.START
 
     init {
         loadAllTasks()
@@ -86,8 +87,14 @@ class TasksPresenter : BasePresenter<TasksView>() {
     private fun subscribeTaskList() {
         taskListSubject.hide()
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                tasksScreenStates = TasksScreenStates.LOADING
+                getView()?.updateState(tasksScreenStates)
+            }
             .subscribeBy(
                 onNext = {
+                    tasksScreenStates = TasksScreenStates.CONTENT
+                    getView()?.updateState(tasksScreenStates)
                     getView()?.updateTaskList(it)
                 },
                 onError = {

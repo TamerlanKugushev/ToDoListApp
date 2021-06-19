@@ -10,4 +10,5 @@
     <color name="red_error_background">#FBA0A0</color>
     <color name="red_error_text">#BC0303</color>
     <color name="red_error_icon">#800101</color>
+    <color name="red">#ff1744</color>
 </resources>

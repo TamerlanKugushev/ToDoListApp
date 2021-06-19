@@ -6,7 +6,6 @@ data class TaskResponse(
 
     @SerializedName("data")
     val task: Task
-
 )
 
 data class Task(

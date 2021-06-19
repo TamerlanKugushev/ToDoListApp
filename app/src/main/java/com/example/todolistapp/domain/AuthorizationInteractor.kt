@@ -22,6 +22,6 @@ class AuthorizationInteractor {
         age: String
     ): Single<UserRegisterResponse> {
         return AuthorizationRepository
-            .registerUser(name.trim(), password.trim() , email.trim() , age.trim().toInt())
+            .registerUser(name.trim(), password.trim(), email.trim(), age.trim().toInt())
     }
 }

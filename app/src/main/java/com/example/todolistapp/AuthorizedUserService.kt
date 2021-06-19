@@ -1,7 +1,6 @@
 package com.example.todolistapp
 
 import com.example.todolistapp.data.models.delete.UserDeleteResponse
-import com.example.todolistapp.data.models.logout.UserLogoutResponse
 import com.example.todolistapp.data.models.task.TaskListResponse
 import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
