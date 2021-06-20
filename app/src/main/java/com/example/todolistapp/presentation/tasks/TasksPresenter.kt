@@ -8,6 +8,7 @@ import com.example.todolistapp.domain.DeleteUserInteractor
 import com.example.todolistapp.domain.LogoutInteractor
 import com.example.todolistapp.domain.TasksInteractor
 import com.example.todolistapp.utils.BasePresenter
+import com.example.todolistapp.utils.logException
 import com.github.terrakok.cicerone.Router
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -43,7 +44,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
                     router.navigateTo(Screens.SignInScreen())
                 },
                 onError = {
-                    Log.e("LOGOUT", it.toString())
+                    logException(this, it)
                 }
             ).addTo(dataCompositeDisposable)
     }
@@ -56,10 +57,9 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .subscribeBy(
                 onSuccess = {
                     router.navigateTo(Screens.SignInScreen())
-                    Log.i("DEL", it.toString())
                 },
                 onError = {
-                    Log.e("DEL", it.toString())
+                    logException(this, it)
                 }
             ).addTo(dataCompositeDisposable)
     }
@@ -76,10 +76,9 @@ class TasksPresenter : BasePresenter<TasksView>() {
             .subscribeBy(
                 onSuccess = {
                     taskListSubject.accept(it)
-                    Log.i("TASKS", it.toString())
                 },
                 onError = {
-                    Log.e("TASKS", it.toString())
+                    logException(this, it)
                 }
             ).addTo(dataCompositeDisposable)
     }
@@ -98,7 +97,7 @@ class TasksPresenter : BasePresenter<TasksView>() {
                     getView()?.updateTaskList(it)
                 },
                 onError = {
-                    Log.e("TASKS", it.toString())
+                    logException(this, it)
                 }
             ).addTo(viewCompositeDisposable)
     }

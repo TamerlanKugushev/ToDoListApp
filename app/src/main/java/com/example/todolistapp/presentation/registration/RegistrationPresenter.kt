@@ -5,6 +5,7 @@ import com.example.todolistapp.BaseApplication
 import com.example.todolistapp.Screens
 import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.utils.BasePresenter
+import com.example.todolistapp.utils.logException
 import com.github.terrakok.cicerone.Router
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -31,12 +32,10 @@ class RegistrationPresenter : BasePresenter<RegistrationView>() {
                 onSuccess = {
                     getView()?.hideProgressBar()
                     router.newRootScreen(Screens.TasksScreen())
-                    Log.i("REG", it.toString())
                 }, onError = {
                     getView()?.hideProgressBar()
                     getView()?.showError()
-                    Log.e("REG", it.toString())
-                }
+                    logException(this, it)                }
             ).addTo(viewCompositeDisposable)
     }
 

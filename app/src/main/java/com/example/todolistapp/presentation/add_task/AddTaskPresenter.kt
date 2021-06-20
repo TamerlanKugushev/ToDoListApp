@@ -3,6 +3,8 @@ package com.example.todolistapp.presentation.add_task
 import android.util.Log
 import com.example.todolistapp.domain.AddTaskInteractor
 import com.example.todolistapp.utils.BasePresenter
+import com.example.todolistapp.utils.logException
+import com.google.firebase.installations.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -20,10 +22,9 @@ class AddTaskPresenter : BasePresenter<AddTaskView>() {
             .subscribeBy(
                 onSuccess = {
                     getView()?.addTask(it)
-                    Log.i("ADD", it.toString())
                 },
                 onError = {
-                    Log.i("ADD", it.toString())
+                    logException(this, it)
                 }
             ).addTo(viewCompositeDisposable)
     }
