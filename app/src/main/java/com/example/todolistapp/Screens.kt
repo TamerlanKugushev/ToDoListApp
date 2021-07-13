@@ -4,6 +4,7 @@ import com.example.todolistapp.presentation.add_task.AddTaskDialog
 import com.example.todolistapp.presentation.registration.RegistrationFragment
 import com.example.todolistapp.presentation.sign_in.SignInFragment
 import com.example.todolistapp.presentation.tasks.TasksFragment
+import com.example.todolistapp.presentation.update_task.UpdateTaskFragment
 import com.example.todolistapp.presentation.welcome.WelcomeFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 
@@ -16,4 +17,6 @@ object Screens {
     fun SignInScreen() = FragmentScreen { SignInFragment.newInstance() }
 
     fun TasksScreen() = FragmentScreen { TasksFragment.newInstance() }
+
+    fun UpdateScreen(id: String) = FragmentScreen { UpdateTaskFragment.newInstance(id) }
 }

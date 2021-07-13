@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoListApp"
-        android:name=".BaseApplication"
+        android:name=".utils.BaseApplication"
         >
-        <activity android:name=".MainActivity"
+        <activity android:name=".activities.MainActivity"
             tools:ignore="ExtraText"
             android:windowSoftInputMode="adjustResize"
             >

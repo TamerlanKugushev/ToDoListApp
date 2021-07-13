@@ -10,11 +10,12 @@ import com.example.todolistapp.R
 import com.example.todolistapp.data.models.task.Task
 import kotlinx.android.synthetic.main.item_task.view.*
 
-class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(TasksDiffUtilCallback()) {
+class TasksAdapter(private val onItemClick: (id: String) -> Unit) :
+    ListAdapter<Task, TasksAdapter.TaskViewHolder>(TasksDiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
-        return TaskViewHolder(view)
+        return TaskViewHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
@@ -22,9 +23,22 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(TasksDiffUti
         holder.bind(currentItem)
     }
 
-    class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TaskViewHolder(
+        itemView: View,
+        onItemClick: (id: String) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+
+        private var id: String = ""
+
+        init {
+            itemView.setOnClickListener {
+                onItemClick.invoke(id)
+            }
+        }
+
         fun bind(task: Task) {
             itemView.descriptionOfTask_txt.text = task.description
+            id = task.id
         }
     }
 

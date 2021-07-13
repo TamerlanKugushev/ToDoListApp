@@ -1,8 +1,8 @@
 package com.example.todolistapp.data.repositories
 
-import com.example.todolistapp.AppPreferencesHelper
-import com.example.todolistapp.BaseApplication
-import com.example.todolistapp.RetrofitHolder
+import com.example.todolistapp.utils.AppPreferencesHelper
+import com.example.todolistapp.utils.BaseApplication
+import com.example.todolistapp.network.RetrofitHolder
 import com.example.todolistapp.data.models.delete.UserDeleteResponse
 import io.reactivex.Single
 

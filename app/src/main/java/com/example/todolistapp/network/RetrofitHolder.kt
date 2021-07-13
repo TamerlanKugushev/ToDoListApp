@@ -1,4 +1,4 @@
-package com.example.todolistapp
+package com.example.todolistapp.network
 
 import com.example.todolistapp.data.interceptors.ContentTypeInterceptor
 import com.example.todolistapp.data.interceptors.TokenInterceptor

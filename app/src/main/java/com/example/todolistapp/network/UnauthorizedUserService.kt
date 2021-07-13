@@ -1,4 +1,4 @@
-package com.example.todolistapp
+package com.example.todolistapp.network
 
 import com.example.todolistapp.data.models.*
 import com.example.todolistapp.data.models.login.UserLoginRequest

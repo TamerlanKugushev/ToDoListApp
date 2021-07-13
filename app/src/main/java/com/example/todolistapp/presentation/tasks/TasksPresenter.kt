@@ -1,7 +1,6 @@
 package com.example.todolistapp.presentation.tasks
 
-import android.util.Log
-import com.example.todolistapp.BaseApplication
+import com.example.todolistapp.utils.BaseApplication
 import com.example.todolistapp.Screens
 import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.domain.DeleteUserInteractor
@@ -9,7 +8,6 @@ import com.example.todolistapp.domain.LogoutInteractor
 import com.example.todolistapp.domain.TasksInteractor
 import com.example.todolistapp.utils.BasePresenter
 import com.example.todolistapp.utils.logException
-import com.github.terrakok.cicerone.Router
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -67,6 +65,17 @@ class TasksPresenter : BasePresenter<TasksView>() {
     fun onTaskAdded(task: Task) {
         val taskList = taskListSubject.value.orEmpty().toMutableList()
         taskList.add(task)
+        taskListSubject.accept(taskList)
+    }
+
+    fun navigateToUpdateScreen(id:String) {
+        router.navigateTo(Screens.UpdateScreen(id))
+    }
+
+    fun onTaskUpdatedById(id: String, description: String) {
+        val taskList = taskListSubject.value.orEmpty().toMutableList()
+        val taskForUpdate = taskList.firstOrNull { it.id == id } ?: return
+        taskForUpdate.description = description
         taskListSubject.accept(taskList)
     }
 

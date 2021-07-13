@@ -1,6 +1,6 @@
 package com.example.todolistapp.presentation.welcome
 
-import com.example.todolistapp.BaseApplication
+import com.example.todolistapp.utils.BaseApplication
 import com.example.todolistapp.Screens
 import com.example.todolistapp.utils.BasePresenter
 import com.github.terrakok.cicerone.Router

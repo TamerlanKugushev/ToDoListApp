@@ -1,7 +1,7 @@
 package com.example.todolistapp.data.interceptors
 
-import com.example.todolistapp.AppPreferencesHelper
-import com.example.todolistapp.BaseApplication
+import com.example.todolistapp.utils.AppPreferencesHelper
+import com.example.todolistapp.utils.BaseApplication
 import okhttp3.Interceptor
 import okhttp3.Response
 

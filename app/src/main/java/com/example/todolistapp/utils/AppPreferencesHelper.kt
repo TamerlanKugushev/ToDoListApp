@@ -1,4 +1,4 @@
-package com.example.todolistapp
+package com.example.todolistapp.utils
 
 import android.content.Context
 import android.content.SharedPreferences

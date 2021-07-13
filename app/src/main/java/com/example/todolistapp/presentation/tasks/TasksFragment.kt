@@ -1,7 +1,9 @@
 package com.example.todolistapp.presentation.tasks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolistapp.R
 import com.example.todolistapp.data.models.task.Task
@@ -27,7 +29,6 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tasks, container, false)
     }
 
@@ -46,13 +47,18 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.inflateMenu(R.menu.menu_tasks_fragment)
+        setFragmentResultListener("requestKey") { _, bundle ->
+            val id = bundle.getString("id") ?: ""
+            val description = bundle.getString("description") ?: ""
+            presenter.onTaskUpdatedById(id, description)
+        }
 
+        toolbar.inflateMenu(R.menu.menu_tasks_fragment)
         toolbar.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
 
-        tasksAdapter = TasksAdapter()
+        tasksAdapter = TasksAdapter(presenter::navigateToUpdateScreen)
         tasksRecyclerView.setHasFixedSize(true)
         tasksRecyclerView.adapter = tasksAdapter
         tasksRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -125,6 +131,7 @@ class TasksFragment : BaseFragment(), AddTaskListener, TasksView {
             }
         }
     }
+
 }
 
 

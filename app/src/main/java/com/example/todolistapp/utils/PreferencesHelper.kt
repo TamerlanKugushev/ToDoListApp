@@ -1,4 +1,4 @@
-package com.example.todolistapp
+package com.example.todolistapp.utils
 
 interface PreferencesHelper {
 

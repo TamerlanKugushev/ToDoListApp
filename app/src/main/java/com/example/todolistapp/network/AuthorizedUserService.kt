@@ -1,15 +1,14 @@
-package com.example.todolistapp
+package com.example.todolistapp.network
 
+import com.example.todolistapp.data.models.BaseResponse
 import com.example.todolistapp.data.models.delete.UserDeleteResponse
 import com.example.todolistapp.data.models.task.TaskListResponse
 import com.example.todolistapp.data.models.task.TaskRequest
 import com.example.todolistapp.data.models.task.TaskResponse
+import com.example.todolistapp.data.models.update_task.UpdateTaskResponse
 import io.reactivex.Completable
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AuthorizedUserService {
 
@@ -24,5 +23,12 @@ interface AuthorizedUserService {
 
     @GET("task")
     fun getAllTask(): Single<TaskListResponse>
+
+    @PUT("task/{id}")
+    fun updateTask(
+        @Path("id") id: String,
+        @Query("description") description:String,
+        @Query("completed") completed: Boolean = true
+    ): Single<BaseResponse<UpdateTaskResponse>>
 }
 

@@ -1,4 +1,4 @@
-package com.example.todolistapp
+package com.example.todolistapp.utils
 
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone

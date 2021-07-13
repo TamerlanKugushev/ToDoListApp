@@ -1,7 +1,6 @@
 package com.example.todolistapp.presentation.sign_in
 
-import android.util.Log
-import com.example.todolistapp.BaseApplication
+import com.example.todolistapp.utils.BaseApplication
 import com.example.todolistapp.Screens
 import com.example.todolistapp.domain.AuthorizationInteractor
 import com.example.todolistapp.utils.BasePresenter

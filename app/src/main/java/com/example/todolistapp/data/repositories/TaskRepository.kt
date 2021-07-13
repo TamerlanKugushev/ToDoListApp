@@ -1,9 +1,11 @@
 package com.example.todolistapp.data.repositories
 
-import com.example.todolistapp.RetrofitHolder
+import com.example.todolistapp.network.RetrofitHolder
 import com.example.todolistapp.TaskConverter
+import com.example.todolistapp.data.models.handleResponse
 import com.example.todolistapp.data.models.task.Task
 import com.example.todolistapp.data.models.task.TaskRequest
+import com.example.todolistapp.data.models.update_task.UpdateTaskResponse
 import io.reactivex.Single
 
 object TaskRepository {
@@ -21,5 +23,12 @@ object TaskRepository {
         return authorizedUserService
             .getAllTask()
             .map(TaskConverter::toTaskList)
+    }
+
+    fun updateTask(id: String, description: String): Single<UpdateTaskResponse> {
+        return authorizedUserService
+            .updateTask(id, description)
+            .map(::handleResponse)
+
     }
 }
